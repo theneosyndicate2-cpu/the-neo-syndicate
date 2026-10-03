@@ -1,0 +1,21 @@
+/** Short list of common countries; "Other" covers everything else. */
+export const countries = [
+  "United Kingdom",
+  "Ireland",
+  "United States",
+  "Canada",
+  "Australia",
+  "United Arab Emirates",
+  "Nigeria",
+  "Ghana",
+  "Kenya",
+  "South Africa",
+  "Germany",
+  "France",
+  "Netherlands",
+  "Spain",
+  "Italy",
+  "Switzerland",
+  "Singapore",
+  "Other",
+];

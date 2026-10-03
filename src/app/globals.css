@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   THE NEO SYNDICATE — design tokens
+   Near-black canvas, charcoal surfaces, off-white type, metallic gold.
+------------------------------------------------------------------- */
+@theme {
+  --color-ink: #050506;
+  --color-night: #0a0a0c;
+  --color-charcoal: #111114;
+  --color-graphite: #18181c;
+  --color-steel: #24242a;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.14);
+
+  --color-bone: #efede6;
+  --color-mist: #b9b7b0;
+  --color-muted: #85847f;
+  --color-faint: #5d5c58;
+
+  --color-gold: #c9a961;
+  --color-gold-light: #e8d5a3;
+  --color-gold-deep: #8f7438;
+
+  --color-up: #7fb894;
+  --color-down: #d2806f;
+
+  --font-sans: var(--nf-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--nf-display), var(--nf-sans), ui-sans-serif, sans-serif;
+  --font-serif: var(--nf-serif), ui-serif, Georgia, serif;
+  --font-mono: var(--nf-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --tracking-luxe: 0.32em;
+  --tracking-wide2: 0.18em;
+
+  --ease-luxe: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-shimmer: shimmer 3.2s var(--ease-luxe) infinite;
+  --animate-drift: drift 22s ease-in-out infinite alternate;
+  --animate-pulse-dot: pulse-dot 2.4s ease-in-out infinite;
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes drift {
+    0% { transform: translate3d(-4%, -2%, 0) scale(1); }
+    100% { transform: translate3d(4%, 3%, 0) scale(1.08); }
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(0.8); }
+  }
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  background: var(--color-ink);
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-ink);
+  color: var(--color-bone);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgb(201 169 97 / 0.35);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 1px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- Utilities ---------- */
+
+@utility container-luxe {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (width >= 40rem) { padding-inline: 2rem; }
+  @media (width >= 64rem) { padding-inline: 3rem; }
+}
+
+@utility text-gold-gradient {
+  background: linear-gradient(100deg, #8f7438 0%, #e8d5a3 35%, #c9a961 55%, #f3e6c4 72%, #a88a4a 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: var(--tracking-luxe);
+  text-transform: uppercase;
+  color: var(--color-gold);
+  font-weight: 500;
+}
+
+@utility glass {
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.045), rgb(255 255 255 / 0.015));
+  border: 1px solid var(--color-line);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+@utility hairline-gold {
+  background: linear-gradient(90deg, transparent, rgb(201 169 97 / 0.6), transparent);
+  height: 1px;
+}
+
+@utility grid-bg {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+@utility noise {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Prose styling for legal pages */
+.legal h2 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--color-bone);
+  margin-top: 2.75rem;
+  margin-bottom: 0.875rem;
+  letter-spacing: -0.01em;
+}
+.legal p, .legal li {
+  color: var(--color-mist);
+  line-height: 1.8;
+  font-size: 0.975rem;
+}
+.legal p + p { margin-top: 1rem; }
+.legal ul { list-style: none; padding: 0; margin-top: 0.75rem; display: grid; gap: 0.5rem; }
+.legal li { padding-left: 1.25rem; position: relative; }
+.legal li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.8em;
+  width: 0.5rem;
+  height: 1px;
+  background: var(--color-gold);
+}
+.legal a { color: var(--color-gold-light); text-decoration: underline; text-underline-offset: 3px; }
