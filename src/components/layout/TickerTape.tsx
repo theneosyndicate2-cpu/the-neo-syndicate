@@ -1,22 +1,36 @@
+"use client";
+
 import type { MarketSnapshot } from "@/lib/types";
 import { cn, formatNumber, formatSigned } from "@/lib/utils";
+import { useMarketSnapshot } from "@/components/markets/MarketProvider";
 
 /**
  * Scrolling market ticker shown under the navigation.
- * Always states the data source; demo values are flagged as such.
+ * Always states the data source; closed markets and demo values are flagged.
  */
-export function TickerTape({ snapshot }: { snapshot: MarketSnapshot }) {
+export function TickerTape({ snapshot: initial }: { snapshot: MarketSnapshot }) {
+  const snapshot = useMarketSnapshot(initial);
   const isLive = snapshot.source === "live";
+  const anyClosed = snapshot.quotes.some((q) => q.marketStatus === "closed");
+
   const items = [
     ...snapshot.quotes.map((q) => ({
       key: q.symbol,
       node: (
         <>
+          <span
+            aria-hidden
+            className={cn(
+              "size-1 rounded-full",
+              q.source !== "live" ? "bg-gold" : q.marketStatus === "open" ? "animate-pulse-dot bg-up" : "bg-muted",
+            )}
+          />
           <span className="text-mist">{q.symbol}</span>
-          <span className="text-bone">{formatNumber(q.price, q.decimals)}</span>
-          <span className={cn(q.change > 0 ? "text-up" : q.change < 0 ? "text-down" : "text-muted")}>
+          <span className="tabular text-bone">{formatNumber(q.price, q.decimals)}</span>
+          <span className={cn("tabular", q.change > 0 ? "text-up" : q.change < 0 ? "text-down" : "text-muted")}>
             {q.change > 0 ? "▲" : q.change < 0 ? "▼" : "■"} {formatSigned(q.changePercent, 2, "%")}
           </span>
+          {q.source === "live" && q.marketStatus === "closed" && <span className="text-faint">CLOSED</span>}
         </>
       ),
     })),
@@ -26,7 +40,7 @@ export function TickerTape({ snapshot }: { snapshot: MarketSnapshot }) {
       key: "src",
       node: (
         <span className={isLive ? "text-up" : "text-gold"}>
-          {isLive ? "● LIVE FEED" : "● DEMO DATA — NOT LIVE PRICES"}
+          {isLive ? (anyClosed ? "● LIVE FEED · FX & METALS CLOSED" : "● LIVE FEED") : "● DEMO DATA — NOT LIVE PRICES"}
         </span>
       ),
     },

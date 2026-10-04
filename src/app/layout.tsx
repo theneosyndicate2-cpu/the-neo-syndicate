@@ -6,6 +6,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { TickerTape } from "@/components/layout/TickerTape";
 import { PointerFX } from "@/components/visuals/PointerFX";
+import { MarketProvider } from "@/components/markets/MarketProvider";
 import "./globals.css";
 
 const sans = Inter({ subsets: ["latin"], variable: "--nf-sans", display: "swap" });
@@ -85,9 +86,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(56,225,255,0.05),transparent_60%)]" />
         </div>
         <PointerFX />
-        <Navbar ticker={<TickerTape snapshot={snapshot} />} />
-        <main id="main">{children}</main>
-        <Footer />
+        <MarketProvider initial={snapshot}>
+          <Navbar ticker={<TickerTape snapshot={snapshot} />} />
+          <main id="main">{children}</main>
+          <Footer />
+        </MarketProvider>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}

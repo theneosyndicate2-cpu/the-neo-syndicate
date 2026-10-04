@@ -1,8 +1,10 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import type { DataSource, MarketQuote } from "@/lib/types";
-import { cn, formatNumber, formatSigned } from "@/lib/utils";
+import type { MarketSnapshot } from "@/lib/types";
+import { cn, formatSigned } from "@/lib/utils";
+import { useMarketSnapshot } from "@/components/markets/MarketProvider";
+import { LivePrice } from "@/components/markets/LivePrice";
 
 const C = 300; // viewBox centre
 const NODE_R = 132;
@@ -33,9 +35,9 @@ const spin = (cls: string) => ({ className: cls, style: { transformBox: "view-bo
  * The hero's "reactor core": concentric instrument rings orbiting the Syndicate mark,
  * with readouts for each tracked market. Decorative; real values are labelled by source.
  */
-export function OrbitalCore({ quotes, source }: { quotes: MarketQuote[]; source: DataSource }) {
+export function OrbitalCore({ initial }: { initial: MarketSnapshot }) {
   const reduce = useReducedMotion();
-  const isLive = source === "live";
+  const { quotes } = useMarketSnapshot(initial);
 
   return (
     <motion.div
@@ -158,10 +160,12 @@ export function OrbitalCore({ quotes, source }: { quotes: MarketQuote[]; source:
           >
             <div className="flex items-center justify-between gap-3 text-[0.5625rem] tracking-[0.18em]">
               <span className="text-cyan">{q.symbol}</span>
-              <span className={isLive ? "text-up" : "text-gold/80"}>{isLive ? "LIVE" : "DEMO"}</span>
+              <span className={q.source !== "live" ? "text-gold/80" : q.marketStatus === "open" ? "text-up" : "text-muted"}>
+                {q.source !== "live" ? "DEMO" : q.marketStatus === "open" ? "● LIVE" : "CLOSED"}
+              </span>
             </div>
             <div className="tabular mt-1 flex items-baseline justify-between gap-3">
-              <span className="text-sm text-bone">{formatNumber(q.price, q.decimals)}</span>
+              <LivePrice value={q.price} decimals={q.decimals} className="text-sm text-bone" />
               <span className={cn("text-[0.625rem]", up ? "text-up" : "text-down")}>
                 {up ? "▲" : "▼"}
                 {formatSigned(q.changePercent, 2, "%")}

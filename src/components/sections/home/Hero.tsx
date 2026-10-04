@@ -99,7 +99,7 @@ export function Hero({ snapshot }: { snapshot: MarketSnapshot }) {
         </div>
 
         <div className="relative lg:col-span-6 lg:pr-14 xl:pr-0">
-          <OrbitalCore quotes={snapshot.quotes} source={snapshot.source} />
+          <OrbitalCore initial={snapshot} />
         </div>
       </div>
     </section>

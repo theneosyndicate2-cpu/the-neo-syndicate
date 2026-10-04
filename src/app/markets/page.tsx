@@ -1,11 +1,11 @@
 import { CalendarClock, Globe2, Radar } from "lucide-react";
 import { pageMetadata } from "@/lib/seo";
-import { cn, formatDateTime, formatNumber, formatSigned } from "@/lib/utils";
 import { getMarketSnapshot } from "@/services/marketData";
 import { PageHero } from "@/components/sections/PageHero";
 import { CTASection } from "@/components/sections/CTASection";
 import { RiskDisclosure } from "@/components/sections/RiskDisclosure";
 import { MarketCard } from "@/components/cards/MarketCard";
+import { MarketsTable } from "@/components/markets/MarketsTable";
 import { DataSourceBadge } from "@/components/ui/Badge";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -54,7 +54,7 @@ export default async function MarketsPage() {
       >
         <DataSourceBadge
           source={snapshot.source}
-          label={isLive ? undefined : "Demo data — live market feed not yet connected"}
+          label={isLive ? "Live data · updates every few seconds" : snapshot.source === "demo" ? "Demo data — live market feed unavailable" : "Partially live — some feeds unavailable"}
         />
       </PageHero>
 
@@ -62,47 +62,13 @@ export default async function MarketsPage() {
         <div className="container-luxe">
           {/* Overview table */}
           <Reveal>
-            <div className="overflow-x-auto rounded-3xl border border-line">
-              <table className="tabular w-full min-w-[44rem] text-left text-sm">
-                <caption className="sr-only">Market overview{isLive ? "" : " (demo data, not live prices)"}</caption>
-                <thead className="bg-night label-mono">
-                  <tr>
-                    {["Asset", "Price", "Daily change", "Trend", "Sentiment", "Technical bias", "Last update"].map((h) => (
-                      <th key={h} scope="col" className="px-5 py-4 font-medium whitespace-nowrap">
-                        {h}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-line bg-charcoal">
-                  {snapshot.quotes.map((q) => (
-                    <tr key={q.symbol} className="transition-colors hover:bg-graphite">
-                      <th scope="row" className="px-5 py-5 font-display font-normal tracking-[0.12em] text-bone">
-                        {q.symbol}
-                        <span className="block text-[0.6875rem] tracking-normal text-faint">{q.name}</span>
-                      </th>
-                      <td className="px-5 py-5 text-bone">{formatNumber(q.price, q.decimals)}</td>
-                      <td className={cn("px-5 py-5", q.change > 0 ? "text-up" : q.change < 0 ? "text-down" : "text-muted")}>
-                        {formatSigned(q.change, q.decimals)} ({formatSigned(q.changePercent, 2, "%")})
-                      </td>
-                      <td className="px-5 py-5 text-mist capitalize">{q.trend}</td>
-                      <td className="px-5 py-5 text-mist capitalize">{q.sentiment.replace("-", " ")}</td>
-                      <td className="px-5 py-5 text-mist capitalize">{q.technicalBias}</td>
-                      <td className="px-5 py-5 text-xs whitespace-nowrap text-faint">
-                        {formatDateTime(q.updatedAt)}
-                        {!isLive && <span className="block text-gold/80">Not live</span>}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <MarketsTable initial={snapshot} />
           </Reveal>
 
           <div className="mt-8 grid gap-6 lg:grid-cols-3">
             {snapshot.quotes.map((q, i) => (
               <Reveal key={q.symbol} delay={i * 0.1} className="h-full">
-                <MarketCard quote={q} source={snapshot.source} variant="detailed" className="h-full" />
+                <MarketCard quote={q} variant="detailed" className="h-full" />
               </Reveal>
             ))}
           </div>
@@ -129,7 +95,7 @@ export default async function MarketsPage() {
           <Reveal className="mt-12">
             <RiskDisclosure
               title="About this data"
-              text="Market commentary is general information, not personal advice. Prices displayed on this page are demonstration values until a licensed market-data provider is connected and must not be used for trading decisions."
+              text="Prices are sourced from public market feeds (Swissquote spot quotes, Coinbase, and ICE/COMEX session data) and the DXY value is calculated from live FX rates using the ICE formula. Feeds can be delayed, interrupted or differ from your broker's prices. Trend, bias, sentiment, pivot levels and notes are calculated automatically from price action — they are general information, not personal advice, and must not be relied on as the sole basis for trading decisions."
             />
           </Reveal>
         </div>

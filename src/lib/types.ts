@@ -12,28 +12,42 @@ export type Trend = "bullish" | "bearish" | "neutral";
 export type Sentiment = "risk-on" | "risk-off" | "mixed";
 export type Bias = "long" | "short" | "neutral";
 
-export interface MarketQuote {
+export type MarketStatus = "open" | "closed";
+
+/** Raw market values as delivered by a provider, before analytics are derived. */
+export interface RawQuote {
   symbol: AssetSymbol;
   name: string;
   description: string;
   price: number;
-  change: number;
-  changePercent: number;
+  /** Reference price the daily change is measured against (prior close / 24h open). */
+  previousClose: number;
   dayHigh: number;
   dayLow: number;
   decimals: number;
+  /** Intraday price series used for sparklines. */
+  history: number[];
+  /** Time of the last price update (ISO). */
+  updatedAt: string;
+  marketStatus: MarketStatus;
+  source: DataSource;
+  /** Human-readable data attribution, e.g. "Coinbase". */
+  sourceName: string;
+}
+
+export interface MarketQuote extends RawQuote {
+  change: number;
+  changePercent: number;
   trend: Trend;
   sentiment: Sentiment;
   technicalBias: Bias;
-  /** Short analyst note. */
+  /** Short market note (auto-generated from price action for live data). */
   commentary: string;
   keyLevels: { label: string; value: number }[];
-  /** Normalised series used for sparklines. */
-  history: number[];
-  updatedAt: string;
 }
 
 export interface MarketSnapshot {
+  /** "live" only when every quote comes from a live provider. */
   source: DataSource;
   quotes: MarketQuote[];
   fetchedAt: string;

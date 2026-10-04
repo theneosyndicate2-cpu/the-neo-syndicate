@@ -1,11 +1,16 @@
+"use client";
+
 import { ArrowDownRight, ArrowUpRight, Minus } from "lucide-react";
-import type { DataSource, MarketQuote } from "@/lib/types";
+import type { MarketQuote } from "@/lib/types";
 import { cn, formatDateTime, formatNumber, formatSigned } from "@/lib/utils";
 import { Sparkline } from "@/components/visuals/Sparkline";
+import { useLiveQuote } from "@/components/markets/MarketProvider";
+import { LivePrice } from "@/components/markets/LivePrice";
+import { QuoteStatusBadge } from "@/components/markets/StatusBadge";
 
 interface MarketCardProps {
+  /** Server-rendered quote; replaced by the live value from MarketProvider in the browser. */
   quote: MarketQuote;
-  source: DataSource;
   variant?: "compact" | "detailed";
   className?: string;
 }
@@ -14,11 +19,12 @@ const trendLabel = { bullish: "Bullish", bearish: "Bearish", neutral: "Neutral" 
 const biasLabel = { long: "Long bias", short: "Short bias", neutral: "No bias" } as const;
 const sentimentLabel = { "risk-on": "Risk-on", "risk-off": "Risk-off", mixed: "Mixed" } as const;
 
-export function MarketCard({ quote, source, variant = "compact", className }: MarketCardProps) {
+export function MarketCard({ quote: initial, variant = "compact", className }: MarketCardProps) {
+  const quote = useLiveQuote(initial.symbol, initial) ?? initial;
   const up = quote.change > 0;
   const flat = quote.change === 0;
   const Icon = flat ? Minus : up ? ArrowUpRight : ArrowDownRight;
-  const isLive = source === "live";
+  const isLive = quote.source === "live";
 
   return (
     <article
@@ -38,33 +44,20 @@ export function MarketCard({ quote, source, variant = "compact", className }: Ma
           </h3>
           <p className="mt-1 text-xs text-muted">{quote.description}</p>
         </div>
-        <span
-          className={cn(
-            "inline-flex items-center gap-1.5 rounded-sm font-mono border px-2 py-0.5 text-[0.5625rem] tracking-[0.18em] uppercase",
-            isLive ? "border-up/40 text-up" : "border-gold/30 text-gold",
-          )}
-        >
-          <span className={cn("size-1 rounded-full", isLive ? "animate-pulse-dot bg-up" : "bg-gold")} aria-hidden />
-          {isLive ? "Live" : source === "delayed" ? "Delayed" : "Demo"}
-        </span>
+        <QuoteStatusBadge quote={quote} />
       </header>
 
       <div className="mt-7 flex items-end justify-between gap-4">
         <p className="tabular font-display text-[2rem] leading-none font-light tracking-tight text-bone sm:text-4xl">
-          {formatNumber(quote.price, quote.decimals)}
+          <LivePrice value={quote.price} decimals={quote.decimals} />
         </p>
-        <p
-          className={cn(
-            "tabular flex items-center gap-1 text-sm font-medium",
-            flat ? "text-muted" : up ? "text-up" : "text-down",
-          )}
-        >
+        <p className={cn("tabular flex items-center gap-1 text-sm font-medium", flat ? "text-muted" : up ? "text-up" : "text-down")}>
           <Icon className="size-4" aria-hidden />
           {formatSigned(quote.changePercent, 2, "%")}
         </p>
       </div>
       <p className="tabular mt-2 font-mono text-[0.6875rem] text-faint">
-        Day change {formatSigned(quote.change, quote.decimals)} · H {formatNumber(quote.dayHigh, quote.decimals)} · L{" "}
+        Chg {formatSigned(quote.change, quote.decimals)} · H {formatNumber(quote.dayHigh, quote.decimals)} · L{" "}
         {formatNumber(quote.dayLow, quote.decimals)}
       </p>
 
@@ -72,15 +65,15 @@ export function MarketCard({ quote, source, variant = "compact", className }: Ma
 
       <dl className="mt-5 grid grid-cols-3 gap-3 border-t border-line pt-5 font-mono text-[0.6875rem]">
         <div>
-          <dt className="tracking-[0.16em] text-faint uppercase">Trend</dt>
+          <dt className="label-mono">Trend</dt>
           <dd className="mt-1 text-mist">{trendLabel[quote.trend]}</dd>
         </div>
         <div>
-          <dt className="tracking-[0.16em] text-faint uppercase">Bias</dt>
+          <dt className="label-mono">Bias</dt>
           <dd className="mt-1 text-mist">{biasLabel[quote.technicalBias]}</dd>
         </div>
         <div>
-          <dt className="tracking-[0.16em] text-faint uppercase">Sentiment</dt>
+          <dt className="label-mono">Sentiment</dt>
           <dd className="mt-1 text-mist">{sentimentLabel[quote.sentiment]}</dd>
         </div>
       </dl>
@@ -99,9 +92,10 @@ export function MarketCard({ quote, source, variant = "compact", className }: Ma
         </>
       )}
 
-      <p className="mt-6 font-mono label-mono">
-        {isLive ? "Last update " : "Reference values · not live · "}
+      <p className="mt-6 font-mono text-[0.5625rem] leading-relaxed tracking-[0.12em] text-faint uppercase">
+        {isLive ? (quote.marketStatus === "closed" ? "Last price " : "Updated ") : "Reference values · not live · "}
         {formatDateTime(quote.updatedAt)}
+        {isLive && <span className="block normal-case tracking-normal text-faint/80">Source: {quote.sourceName}</span>}
       </p>
     </article>
   );

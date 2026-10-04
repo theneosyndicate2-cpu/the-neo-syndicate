@@ -3,6 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  // Fewer parallel build workers so live market-data fetches during prerender don't flood providers.
+  experimental: { cpus: 4 },
   async headers() {
     return [
       {

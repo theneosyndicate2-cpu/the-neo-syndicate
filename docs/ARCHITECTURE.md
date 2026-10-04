@@ -28,11 +28,26 @@ UI components  ←  page (server component)  ←  src/services/*  ←  src/data/
 
 ## Connecting real data
 
-### Market data
-Set `MARKET_DATA_API_URL` (and optionally `MARKET_DATA_API_KEY`). The endpoint should return
-`{ quotes: MarketQuote[], delayed?: boolean }`. To use a vendor directly (Twelve Data, Polygon, OANDA, etc.),
-write an adapter in `src/services/marketData.ts` that maps the vendor's response to `MarketQuote`.
-Responses are cached for 60s (`revalidate`) and tagged `markets` so they can be revalidated on demand.
+### Market data (live)
+Live by default, no API keys:
+
+| Asset | Price | Daily change / range / chart |
+|---|---|---|
+| XAUUSD | Swissquote public spot quote (bid/ask mid) | COMEX gold futures session (Yahoo chart API), scaled to spot |
+| DXY | Computed from 6 Swissquote FX pairs with the ICE formula | ICE DXY session (Yahoo chart API), scaled to the computed value |
+| BTCUSD | Coinbase Exchange (REST + browser WebSocket ticks) | Coinbase 24h open/high/low, 15-min candles |
+
+Flow: pages render an ISR snapshot (`revalidate` 15s) → `MarketProvider` (client) polls `/api/markets`
+every 5s while FX/metals are open (60s when closed) and streams BTC ticks from `wss://ws-feed.exchange.coinbase.com`.
+A quote whose last update is >10 min old is shown as **CLOSED** (weekends/holidays). Any asset whose feed fails
+falls back to labelled demo data. Trend, bias, sentiment, pivot levels and the market note are computed from price
+action in `src/lib/marketAnalytics.ts` (shared by server and browser).
+
+Overrides: `MARKET_DATA_PROVIDER=demo` forces demo data; `MARKET_DATA_API_URL` (+ `MARKET_DATA_API_KEY`) uses your
+own endpoint returning `{ quotes: RawQuote[] }`.
+
+**Licensing:** the free public feeds are suitable for an informational site. For a commercial product, license
+data (e.g. Twelve Data, Polygon, OANDA, ICE) and connect it via `MARKET_DATA_API_URL` or a new adapter.
 
 ### Trades / pools / performance
 Replace the body of `getTrades`, `getInvestmentPools` and `getPerformanceSummary` with database queries

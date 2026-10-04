@@ -32,8 +32,9 @@ npm run build && npm start   # production
 
 ## Demo data
 
-All market prices, trades, performance figures and pool terms are **demo/placeholder data** and are labelled as
-such in the UI. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for how to connect real data sources and
+**Market prices are live** (XAUUSD, BTCUSD, DXY) from free public feeds — see the market-data section of the
+architecture doc. Trades, performance figures and pool terms are still **demo/placeholder data** and are labelled
+as such in the UI. See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for how to connect real data sources and
 the planned admin dashboard.
 
 ## Configuration
