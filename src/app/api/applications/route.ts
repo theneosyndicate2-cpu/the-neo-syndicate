@@ -10,7 +10,8 @@ export async function POST(request: Request) {
   }
   try {
     const result = await submitApplication((body ?? {}) as Record<string, never>);
-    return NextResponse.json(result, { status: result.ok ? 201 : 422 });
+    const status = result.ok ? 201 : result.code === "EMAIL_NOT_VERIFIED" ? 403 : 422;
+    return NextResponse.json(result, { status });
   } catch (error) {
     console.error("[api/applications]", error);
     return NextResponse.json(

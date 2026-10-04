@@ -152,6 +152,30 @@ export interface SubmissionResult {
   reference?: string;
   errors?: Record<string, string>;
   message?: string;
+  /** Machine-readable failure reason, e.g. "EMAIL_NOT_VERIFIED". */
+  code?: string;
+}
+
+/* ---------- Email verification ---------- */
+
+export interface VerificationStartResponse {
+  ok: boolean;
+  token?: string;
+  expiresAt?: number;
+  resendAfter?: number;
+  /** Present only in test mode (no email provider configured). */
+  testCode?: string;
+  message?: string;
+  retryAfter?: number;
+}
+
+export interface VerificationConfirmResponse {
+  ok: boolean;
+  proof?: string;
+  email?: string;
+  message?: string;
+  attemptsLeft?: number;
+  expired?: boolean;
 }
 
 /* ---------- Admin-ready models (not yet surfaced in the UI) ---------- */

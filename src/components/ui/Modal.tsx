@@ -41,7 +41,11 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
     const { overflow } = document.body.style;
     document.body.style.overflow = "hidden";
     document.addEventListener("keydown", onKey);
-    requestAnimationFrame(() => panelRef.current?.focus());
+    // Focus an element marked `data-autofocus` inside the dialog, otherwise the dialog itself.
+    requestAnimationFrame(() => {
+      const target = panelRef.current?.querySelector<HTMLElement>("[data-autofocus]") ?? panelRef.current;
+      target?.focus();
+    });
     return () => {
       document.body.style.overflow = overflow;
       document.removeEventListener("keydown", onKey);

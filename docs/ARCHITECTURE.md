@@ -49,6 +49,21 @@ own endpoint returning `{ quotes: RawQuote[] }`.
 **Licensing:** the free public feeds are suitable for an informational site. For a commercial product, license
 data (e.g. Twelve Data, Polygon, OANDA, ICE) and connect it via `MARKET_DATA_API_URL` or a new adapter.
 
+### Application email verification
+`/invest` applications require the applicant to confirm their email with a 6-digit code:
+
+1. `POST /api/verification/send { email }` → emails a code (`src/emails/verificationEmail.ts`) and returns a signed
+   **challenge** token containing only an HMAC of the code (never the code itself). 10-min expiry; 60s resend
+   cooldown; max 5 sends/hour per email and per IP.
+2. `POST /api/verification/verify { token, code }` → max 5 attempts, single use; returns a signed **proof** (30 min).
+3. `POST /api/applications { ...fields, emailProof }` → rejected with `403 EMAIL_NOT_VERIFIED` unless the proof is
+   valid and matches the submitted email.
+
+Config: `VERIFICATION_SECRET` (required in production), `RESEND_API_KEY` + `EMAIL_FROM` to send real email.
+Without a provider the flow runs in **test mode** (`EMAIL_DELIVERY=console`, or any non-production run): the code
+is logged and shown on screen with a "Test mode" label — never enable that on the live site. Attempt/throttle
+counters are in-memory per instance; move them to Redis/the database when running multiple instances.
+
 ### Trades / pools / performance
 Replace the body of `getTrades`, `getInvestmentPools` and `getPerformanceSummary` with database queries
 (Prisma, Drizzle, Supabase…) — keep the return shapes.

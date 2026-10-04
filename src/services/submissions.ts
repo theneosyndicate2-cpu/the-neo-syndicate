@@ -1,6 +1,7 @@
 import "server-only";
 import type { ApplicationPayload, ContactPayload, SubmissionResult } from "@/lib/types";
 import { validateApplication, validateContact } from "@/lib/validation";
+import { checkProof } from "./verification";
 
 /**
  * Submission service for investment applications and contact messages.
@@ -32,11 +33,22 @@ async function persist(kind: "application" | "contact", reference: string, data:
   }
 }
 
-export async function submitApplication(input: Partial<ApplicationPayload>): Promise<SubmissionResult> {
+export async function submitApplication(
+  input: Partial<ApplicationPayload> & { emailProof?: unknown },
+): Promise<SubmissionResult> {
   const { data, errors } = validateApplication(input);
   if (!data) return { ok: false, errors, message: "Please review the highlighted fields." };
+  // The applicant must have confirmed this exact email address with a code.
+  if (!checkProof(input.emailProof, data.email)) {
+    return {
+      ok: false,
+      code: "EMAIL_NOT_VERIFIED",
+      errors: { email: "Please verify your email address." },
+      message: "Please verify your email address to submit your application.",
+    };
+  }
   const reference = makeReference("NSA");
-  await persist("application", reference, data);
+  await persist("application", reference, { ...data, emailVerified: true });
   return { ok: true, reference };
 }
 
