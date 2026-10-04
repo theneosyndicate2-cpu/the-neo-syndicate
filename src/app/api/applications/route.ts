@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getCurrentUser } from "@/lib/server/auth";
 import { submitApplication } from "@/services/submissions";
 
 export async function POST(request: Request) {
@@ -9,7 +10,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, message: "Invalid request body." }, { status: 400 });
   }
   try {
-    const result = await submitApplication((body ?? {}) as Record<string, never>);
+    const result = await submitApplication((body ?? {}) as Record<string, never>, await getCurrentUser());
     const status = result.ok ? 201 : result.code === "EMAIL_NOT_VERIFIED" ? 403 : 422;
     return NextResponse.json(result, { status });
   } catch (error) {

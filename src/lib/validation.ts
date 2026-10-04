@@ -58,3 +58,56 @@ export function validateContact(input: Partial<ContactPayload>): { data?: Contac
 
   return Object.keys(errors).length ? { errors } : { data, errors };
 }
+
+
+/* ---------- Accounts ---------- */
+
+export const PASSWORD_MIN = 10;
+
+/** Returns an error message, or null when the password is acceptable. */
+export function passwordProblem(password: string, email = ""): string | null {
+  if (password.length < PASSWORD_MIN) return `Use at least ${PASSWORD_MIN} characters.`;
+  if (password.length > 200) return "That password is too long.";
+  if (!/[a-zA-Z]/.test(password) || !/[0-9\W_]/.test(password)) return "Mix letters with numbers or symbols.";
+  const local = email.split("@")[0]?.toLowerCase();
+  if (local && local.length >= 4 && password.toLowerCase().includes(local)) return "Don't include your email in your password.";
+  if (/^(.)\1+$/.test(password) || /^(password|qwerty|letmein|welcome)/i.test(password)) return "Choose a less common password.";
+  return null;
+}
+
+export interface SignupPayload {
+  name: string;
+  email: string;
+  password: string;
+  telegram: string;
+  acceptTerms: boolean;
+}
+
+export function validateSignup(input: Partial<SignupPayload>): { data?: SignupPayload; errors: Errors } {
+  const data: SignupPayload = {
+    name: str(input.name, 120),
+    email: str(input.email, 200).toLowerCase(),
+    password: typeof input.password === "string" ? input.password : "",
+    telegram: str(input.telegram, 40),
+    acceptTerms: input.acceptTerms === true,
+  };
+  const errors: Errors = {};
+  if (data.name.length < 2) errors.name = "Please enter your name.";
+  if (!EMAIL_RE.test(data.email)) errors.email = "Please enter a valid email address.";
+  const pw = passwordProblem(data.password, data.email);
+  if (pw) errors.password = pw;
+  if (data.telegram && !TELEGRAM_RE.test(data.telegram)) errors.telegram = "Use a valid Telegram username, e.g. @username.";
+  if (!data.acceptTerms) errors.acceptTerms = "Please accept the terms and risk disclosure.";
+  return Object.keys(errors).length ? { errors } : { data, errors };
+}
+
+export function validateProfile(input: { name?: unknown; telegram?: unknown }): {
+  data?: { name: string; telegram: string };
+  errors: Errors;
+} {
+  const data = { name: str(input.name, 120), telegram: str(input.telegram, 40) };
+  const errors: Errors = {};
+  if (data.name.length < 2) errors.name = "Please enter your name.";
+  if (data.telegram && !TELEGRAM_RE.test(data.telegram)) errors.telegram = "Use a valid Telegram username, e.g. @username.";
+  return Object.keys(errors).length ? { errors } : { data, errors };
+}

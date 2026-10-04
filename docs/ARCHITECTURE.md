@@ -64,6 +64,21 @@ Without a provider the flow runs in **test mode** (`EMAIL_DELIVERY=console`, or 
 is logged and shown on screen with a "Test mode" label — never enable that on the live site. Attempt/throttle
 counters are in-memory per instance; move them to Redis/the database when running multiple instances.
 
+### Member accounts & portal
+- **Database:** Drizzle ORM on PostgreSQL. No `DATABASE_URL` → embedded PGlite in `.data/pglite` (local only).
+  Set `DATABASE_URL` in production. Schema: `src/db/schema.ts`; SQL migrations in `src/db/migrations.ts` run
+  automatically on first use (append new ones, never edit applied ones).
+- **Auth** (`src/lib/server/auth.ts`): scrypt password hashes; 30-day sessions as a random token in an httpOnly,
+  SameSite=Lax cookie (`ns_session`) — only its SHA-256 is stored. Login throttling (6 failures / 15 min per IP and
+  per email), same-origin checks on all mutating endpoints, generic login errors, no account enumeration on reset.
+- **Flows:** `/signup` (details → email code → account + session), `/login`, `/forgot-password` (code → new
+  password; signs out other devices). Signed-in members applying with their account email skip the code step.
+- **Portal** (`/portal`, protected in `src/app/portal/layout.tsx`): dashboard (tier, latest application,
+  announcements, live markets, trades), `/portal/trades` (Member tier+), `/portal/applications`, `/portal/account`.
+- **Tiers** (`src/lib/tiers.ts`): observer → member → elite → private-capital. New accounts are Observers.
+  Until the admin dashboard exists: `npm run member:tier -- <email> <tier>` (stop the dev server first when using
+  the embedded database), or `npm run member:tier -- --list`.
+
 ### Trades / pools / performance
 Replace the body of `getTrades`, `getInvestmentPools` and `getPerformanceSummary` with database queries
 (Prisma, Drizzle, Supabase…) — keep the return shapes.

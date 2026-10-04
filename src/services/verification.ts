@@ -122,11 +122,18 @@ export type ConfirmResult =
   | { ok: true; proof: string; email: string }
   | { ok: false; status: number; message: string; attemptsLeft?: number; expired?: boolean };
 
-export function confirmVerification(token: unknown, code: unknown): ConfirmResult {
+/**
+ * @param expectedEmail  when given, the challenge must belong to this address. Checked
+ *                       before the code is evaluated so a mismatch never consumes the code.
+ */
+export function confirmVerification(token: unknown, code: unknown, expectedEmail?: string): ConfirmResult {
   prune();
   const challenge = verify<Challenge>(token);
   if (!challenge || challenge.t !== "challenge") {
     return { ok: false, status: 410, expired: true, message: "This code has expired. Please request a new one." };
+  }
+  if (expectedEmail !== undefined && challenge.e !== expectedEmail.trim().toLowerCase()) {
+    return { ok: false, status: 422, expired: true, message: "This code was sent to a different email address." };
   }
   const entry = attempts.get(challenge.id) ?? { count: 0, expires: challenge.x };
   if (entry.count >= MAX_ATTEMPTS) {
@@ -151,6 +158,16 @@ export function confirmVerification(token: unknown, code: unknown): ConfirmResul
   attempts.set(challenge.id, { count: MAX_ATTEMPTS, expires: challenge.x });
   const proof = sign<Proof>({ t: "proof", e: challenge.e, x: Date.now() + PROOF_TTL_MIN * 60_000 });
   return { ok: true, proof, email: challenge.e };
+}
+
+/**
+ * A well-formed challenge that can never be satisfied — returned for password
+ * resets on unknown emails so responses don't reveal which emails have accounts.
+ */
+export function decoyChallenge(email: string) {
+  const expiresAt = Date.now() + CODE_TTL_MIN * 60_000;
+  const token = sign<Challenge>({ t: "challenge", id: randomId(), e: email.trim().toLowerCase(), h: randomId(), x: expiresAt });
+  return { ok: true as const, token, expiresAt, resendAfter: RESEND_COOLDOWN_S };
 }
 
 /** True when `proof` is a valid, unexpired verification for `email`. */

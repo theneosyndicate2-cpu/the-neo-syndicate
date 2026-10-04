@@ -62,7 +62,8 @@ export function MarketProvider({ initial, children }: { initial: MarketSnapshot;
       timer = window.setTimeout(poll, anyOpen ? POLL_OPEN_MS : POLL_CLOSED_MS);
     };
 
-    timer = window.setTimeout(poll, 1500);
+    // Fetch straight away if the page was rendered with fallback data.
+    timer = window.setTimeout(poll, latest.current.source === "live" ? 1500 : 0);
     return () => {
       cancelled = true;
       window.clearTimeout(timer);

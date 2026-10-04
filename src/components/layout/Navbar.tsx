@@ -8,6 +8,8 @@ import { navLinks } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { Wordmark } from "@/components/ui/Logo";
 import { ButtonLink } from "@/components/ui/Button";
+import { UserRound } from "lucide-react";
+import { fetchMe } from "@/lib/submit";
 import { MobileMenu } from "./MobileMenu";
 
 export function Navbar({ ticker }: { ticker?: ReactNode }) {
@@ -23,6 +25,16 @@ export function Navbar({ ticker }: { ticker?: ReactNode }) {
   }, []);
 
   useEffect(() => setOpen(false), [pathname]);
+
+  // Session state for the account link (kept client-side so marketing pages stay static).
+  const [me, setMe] = useState<Awaited<ReturnType<typeof fetchMe>>>(null);
+  useEffect(() => {
+    let alive = true;
+    fetchMe().then((u) => alive && setMe(u));
+    return () => {
+      alive = false;
+    };
+  }, [pathname]);
 
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
@@ -46,14 +58,14 @@ export function Navbar({ ticker }: { ticker?: ReactNode }) {
                   href={link.href}
                   aria-current={isActive(link.href) ? "page" : undefined}
                   className={cn(
-                    "group relative px-3 py-2 font-mono text-[0.6875rem] tracking-[0.12em] uppercase transition-colors duration-300 xl:px-3.5",
+                    "group relative px-2.5 py-2 font-mono text-[0.6875rem] tracking-[0.1em] whitespace-nowrap uppercase transition-colors duration-300 2xl:px-3.5",
                     isActive(link.href) ? "text-bone" : "text-muted hover:text-bone",
                   )}
                 >
                   <span
                     aria-hidden
                     className={cn(
-                      "mr-1 transition-colors",
+                      "mr-1 hidden transition-colors 2xl:inline",
                       isActive(link.href) ? "text-cyan" : "text-faint group-hover:text-cyan/70",
                     )}
                   >
@@ -63,7 +75,7 @@ export function Navbar({ ticker }: { ticker?: ReactNode }) {
                   <span
                     aria-hidden
                     className={cn(
-                      "ml-1 transition-colors",
+                      "ml-1 hidden transition-colors 2xl:inline",
                       isActive(link.href) ? "text-cyan" : "text-faint group-hover:text-cyan/70",
                     )}
                   >
@@ -72,7 +84,7 @@ export function Navbar({ ticker }: { ticker?: ReactNode }) {
                   {isActive(link.href) && (
                     <motion.span
                       layoutId="nav-underline"
-                      className="absolute inset-x-3 -bottom-0.5 h-px bg-cyan shadow-[0_0_10px_rgba(56,225,255,0.9)] xl:inset-x-3.5"
+                      className="absolute inset-x-2.5 -bottom-0.5 h-px bg-cyan shadow-[0_0_10px_rgba(56,225,255,0.9)] 2xl:inset-x-3.5"
                       transition={{ type: "spring", stiffness: 380, damping: 32 }}
                     />
                   )}
@@ -81,9 +93,18 @@ export function Navbar({ ticker }: { ticker?: ReactNode }) {
             ))}
           </ul>
 
-          <div className="hidden xl:block">
-            <ButtonLink href="/invest#apply" size="sm" className="h-10 px-5">
-              Join the Syndicate
+          <div className="hidden shrink-0 items-center gap-4 xl:flex">
+            {!me && (
+              <Link
+                href="/login"
+                className="flex items-center gap-2 font-mono text-[0.6875rem] tracking-[0.1em] whitespace-nowrap text-muted uppercase transition-colors hover:text-cyan-light"
+              >
+                <UserRound className="size-4" aria-hidden />
+                <span className="sr-only 2xl:not-sr-only">Sign in</span>
+              </Link>
+            )}
+            <ButtonLink href={me ? "/portal" : "/invest#apply"} size="sm" className="h-10 px-5">
+              {me ? "Member portal" : "Join the Syndicate"}
             </ButtonLink>
           </div>
 
@@ -113,7 +134,7 @@ export function Navbar({ ticker }: { ticker?: ReactNode }) {
         </nav>
         {ticker}
       </header>
-      <MobileMenu open={open} onClose={() => setOpen(false)} isActive={isActive} />
+      <MobileMenu open={open} onClose={() => setOpen(false)} isActive={isActive} signedIn={!!me} />
     </>
   );
 }

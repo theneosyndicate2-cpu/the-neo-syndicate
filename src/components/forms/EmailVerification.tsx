@@ -15,6 +15,8 @@ interface EmailVerificationProps {
   onVerify: (code: string) => void;
   onResend: () => void;
   onChangeEmail: () => void;
+  /** Label of the confirm button. */
+  submitLabel?: string;
 }
 
 function useNow(active: boolean) {
@@ -43,6 +45,7 @@ export function EmailVerification({
   onVerify,
   onResend,
   onChangeEmail,
+  submitLabel = "Verify & submit application",
 }: EmailVerificationProps) {
   const [code, setCode] = useState("");
   const now = useNow(true);
@@ -116,7 +119,7 @@ export function EmailVerification({
               <LoaderCircle className="size-4 animate-spin" aria-hidden /> Verifying
             </span>
           ) : (
-            "Verify & submit application"
+            submitLabel
           )}
         </Button>
       </form>

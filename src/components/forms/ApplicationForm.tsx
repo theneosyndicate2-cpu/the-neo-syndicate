@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { BadgeCheck, CheckCircle2, LoaderCircle } from "lucide-react";
 import type {
   ApplicationPayload,
@@ -11,7 +11,7 @@ import type {
 } from "@/lib/types";
 import { validateApplication } from "@/lib/validation";
 import { countries } from "@/lib/countries";
-import { postJSON } from "@/lib/submit";
+import { fetchMe, postJSON } from "@/lib/submit";
 import { INVESTMENT_RISK_LINE } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
@@ -73,7 +73,27 @@ export function ApplicationForm({ pools }: { pools: PoolOption[] }) {
   const [verifyError, setVerifyError] = useState<string>();
   const [proof, setProof] = useState<{ email: string; token: string } | null>(null);
 
-  const emailVerified = !!proof && proof.email === normalizeEmail(values.email);
+  // Signed-in members applying with their (already verified) account email skip the code step.
+  const [account, setAccount] = useState<{ email: string; name: string; telegram: string | null } | null>(null);
+  useEffect(() => {
+    let alive = true;
+    fetchMe().then((me) => {
+      if (!alive || !me) return;
+      setAccount(me);
+      setValues((v) => ({
+        ...v,
+        fullName: v.fullName || me.name,
+        email: v.email || me.email,
+        telegram: v.telegram || me.telegram || "",
+      }));
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const viaAccount = !!account && account.email === normalizeEmail(values.email);
+  const emailVerified = viaAccount || (!!proof && proof.email === normalizeEmail(values.email));
 
   const set = <K extends keyof ApplicationPayload>(key: K, value: ApplicationPayload[K]) => {
     setValues((v) => ({ ...v, [key]: value }));
@@ -104,7 +124,7 @@ export function ApplicationForm({ pools }: { pools: PoolOption[] }) {
     return true;
   }
 
-  async function submitApplication(proofToken: string) {
+  async function submitApplication(proofToken?: string) {
     setBusy(true);
     const result = await postJSON("/api/applications", { ...values, emailProof: proofToken });
     setBusy(false);
@@ -137,6 +157,10 @@ export function ApplicationForm({ pools }: { pools: PoolOption[] }) {
       setErrors(clientErrors);
       setMessage("Please review the highlighted fields.");
       document.getElementById(`app-${Object.keys(clientErrors)[0]}`)?.focus();
+      return;
+    }
+    if (viaAccount) {
+      await submitApplication();
       return;
     }
     if (emailVerified && proof) {

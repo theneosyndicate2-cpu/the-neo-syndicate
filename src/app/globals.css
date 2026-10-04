@@ -300,3 +300,8 @@ body {
   background: var(--color-cyan);
 }
 .legal a { color: var(--color-cyan-light); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Keep the footer clear of the portal's mobile tab bar */
+@media (width < 64rem) {
+  body:has([data-portal-tabbar]) footer { padding-bottom: 4.5rem; }
+}

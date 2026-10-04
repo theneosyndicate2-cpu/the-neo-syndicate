@@ -12,9 +12,10 @@ interface MobileMenuProps {
   open: boolean;
   onClose: () => void;
   isActive: (href: string) => boolean;
+  signedIn?: boolean;
 }
 
-export function MobileMenu({ open, onClose, isActive }: MobileMenuProps) {
+export function MobileMenu({ open, onClose, isActive, signedIn }: MobileMenuProps) {
   useEffect(() => {
     if (!open) return;
     const { overflow } = document.body.style;
@@ -79,9 +80,14 @@ export function MobileMenu({ open, onClose, isActive }: MobileMenuProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <ButtonLink href="/invest#apply" size="lg" icon className="w-full" onClick={onClose}>
-                Join the Syndicate
+              <ButtonLink href={signedIn ? "/portal" : "/invest#apply"} size="lg" icon className="w-full" onClick={onClose}>
+                {signedIn ? "Member portal" : "Join the Syndicate"}
               </ButtonLink>
+              {!signedIn && (
+                <ButtonLink href="/login" size="lg" variant="secondary" className="w-full" onClick={onClose}>
+                  Member sign in
+                </ButtonLink>
+              )}
               <div className="flex items-center justify-between">
                 <p className="label-mono">{siteConfig.tagline}</p>
                 <SocialLinks />

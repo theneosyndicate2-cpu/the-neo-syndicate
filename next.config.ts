@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   // Fewer parallel build workers so live market-data fetches during prerender don't flood providers.
   experimental: { cpus: 4 },
+  // Database drivers load native/wasm assets at runtime — keep them out of the bundle.
+  serverExternalPackages: ["@electric-sql/pglite", "pg"],
   async headers() {
     return [
       {

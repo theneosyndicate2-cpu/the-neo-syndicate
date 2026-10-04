@@ -19,7 +19,7 @@ export function LogoMark({ className }: { className?: string }) {
 
 export function Wordmark({ className, compact = false }: { className?: string; compact?: boolean }) {
   return (
-    <span className={cn("flex items-center gap-3", className)}>
+    <span className={cn("flex shrink-0 items-center gap-3 whitespace-nowrap", className)}>
       <LogoMark />
       <span className="flex flex-col leading-none">
         <span className="text-[0.5rem] tracking-[0.5em] text-gold uppercase">The</span>
