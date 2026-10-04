@@ -65,7 +65,7 @@ export default async function MarketsPage() {
             <div className="overflow-x-auto rounded-3xl border border-line">
               <table className="tabular w-full min-w-[44rem] text-left text-sm">
                 <caption className="sr-only">Market overview{isLive ? "" : " (demo data, not live prices)"}</caption>
-                <thead className="bg-night text-[0.625rem] tracking-[0.2em] text-faint uppercase">
+                <thead className="bg-night label-mono">
                   <tr>
                     {["Asset", "Price", "Daily change", "Trend", "Sentiment", "Technical bias", "Last update"].map((h) => (
                       <th key={h} scope="col" className="px-5 py-4 font-medium whitespace-nowrap">

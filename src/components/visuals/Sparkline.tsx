@@ -25,7 +25,7 @@ export function Sparkline({ data, positive = true, className, height = 56 }: Spa
   ]);
   const line = points.map(([x, y], i) => `${i ? "L" : "M"}${x.toFixed(1)},${y.toFixed(1)}`).join(" ");
   const area = `${line} L${width},${height} L0,${height} Z`;
-  const stroke = positive ? "var(--color-gold)" : "var(--color-down)";
+  const stroke = positive ? "var(--color-cyan)" : "var(--color-down)";
 
   return (
     <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" className={cn("w-full", className)} style={{ height }} aria-hidden>

@@ -7,14 +7,14 @@ type Variant = "primary" | "secondary" | "ghost";
 type Size = "md" | "lg" | "sm";
 
 const base =
-  "group relative inline-flex items-center justify-center gap-2.5 overflow-hidden rounded-full font-medium uppercase tracking-[0.2em] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] disabled:pointer-events-none disabled:opacity-50 select-none whitespace-nowrap";
+  "group relative inline-flex items-center justify-center gap-2.5 overflow-hidden font-mono font-medium uppercase tracking-[0.16em] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] disabled:pointer-events-none disabled:opacity-50 select-none whitespace-nowrap";
 
 const variants: Record<Variant, string> = {
   primary:
-    "bg-gradient-to-b from-gold-light via-gold to-gold-deep text-ink shadow-[0_0_0_1px_rgba(232,213,163,0.35),0_10px_40px_-12px_rgba(201,169,97,0.55)] hover:shadow-[0_0_0_1px_rgba(232,213,163,0.6),0_16px_50px_-10px_rgba(201,169,97,0.7)] hover:-translate-y-0.5 active:translate-y-0",
+    "chamfer bg-gradient-to-b from-gold-light via-gold to-gold-deep text-ink hover:brightness-110 hover:-translate-y-0.5 active:translate-y-0 drop-shadow-[0_10px_30px_rgba(212,175,95,0.35)]",
   secondary:
-    "border border-line-strong bg-white/[0.02] text-bone backdrop-blur hover:border-gold/60 hover:text-gold-light hover:bg-white/[0.04]",
-  ghost: "text-mist hover:text-gold-light",
+    "chamfer bg-cyan/[0.06] text-cyan-light shadow-[inset_0_0_0_1px_rgba(56,225,255,0.35)] backdrop-blur hover:bg-cyan/[0.12] hover:text-white hover:shadow-[inset_0_0_0_1px_rgba(56,225,255,0.8),0_0_30px_-6px_rgba(56,225,255,0.6)]",
+  ghost: "text-mist hover:text-cyan-light",
 };
 
 const sizes: Record<Size, string> = {
@@ -34,10 +34,13 @@ interface CommonProps {
 function Inner({ children, icon, variant }: { children: ReactNode; icon?: boolean; variant: Variant }) {
   return (
     <>
-      {variant === "primary" && (
+      {variant !== "ghost" && (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/40 to-transparent transition-transform duration-1000 group-hover:translate-x-full"
+          className={cn(
+            "pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent to-transparent transition-transform duration-1000 group-hover:translate-x-full",
+            variant === "primary" ? "via-white/45" : "via-cyan/25",
+          )}
         />
       )}
       <span className="relative">{children}</span>

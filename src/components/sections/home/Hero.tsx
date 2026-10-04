@@ -1,60 +1,80 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import type { MarketSnapshot } from "@/lib/types";
 import { ButtonLink } from "@/components/ui/Button";
-import { HeroVisual } from "@/components/visuals/HeroVisual";
+import { OrbitalCore } from "@/components/visuals/OrbitalCore";
+import { ScrambleText } from "@/components/visuals/ScrambleText";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-export function Hero() {
+const readouts = [
+  { code: "0x01", key: "Risk", value: "Defined" },
+  { code: "0x02", key: "Execution", value: "Planned" },
+  { code: "0x03", key: "Access", value: "By application" },
+];
+
+export function Hero({ snapshot }: { snapshot: MarketSnapshot }) {
   const reduce = useReducedMotion();
   const fade = (delay: number) =>
     reduce
       ? {}
       : {
-          initial: { opacity: 0, y: 24 },
-          animate: { opacity: 1, y: 0 },
+          initial: { opacity: 0, y: 24, filter: "blur(6px)" },
+          animate: { opacity: 1, y: 0, filter: "blur(0px)" },
           transition: { duration: 1.1, delay, ease },
         };
 
   return (
-    <section className="noise relative isolate overflow-hidden pt-32 pb-24 sm:pt-40 lg:min-h-[min(100svh,62rem)] lg:pt-44 lg:pb-32">
+    <section className="noise relative isolate overflow-hidden pt-36 pb-20 sm:pt-44 lg:min-h-[min(100svh,64rem)] lg:pt-48 lg:pb-28">
+      {/* Background: perspective grid floor, scanlines, glows */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="grid-bg absolute inset-0 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_30%,black,transparent)]" />
-        <div className="animate-drift absolute -top-1/4 right-[-10%] h-[50rem] w-[50rem] rounded-full bg-gold/[0.07] blur-[150px]" />
-        <div className="absolute bottom-0 left-0 h-[30rem] w-[30rem] rounded-full bg-white/[0.025] blur-[120px]" />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-ink" />
+        <div className="grid-bg absolute inset-0 [mask-image:radial-gradient(ellipse_75%_60%_at_60%_35%,black,transparent)]" />
+        <div className="absolute inset-x-0 bottom-0 h-[45%] [perspective:600px]">
+          <div className="grid-bg absolute inset-x-[-50%] bottom-0 h-[200%] origin-bottom [transform:rotateX(68deg)] opacity-70 [mask-image:linear-gradient(to_top,black,transparent_70%)]" />
+        </div>
+        <div className="scanlines absolute inset-0 opacity-60" />
+        <div className="animate-drift absolute -top-1/4 right-[-10%] h-[46rem] w-[46rem] rounded-full bg-cyan/[0.06] blur-[150px]" />
+        <div className="absolute top-1/3 left-[-15%] h-[32rem] w-[32rem] rounded-full bg-gold/[0.07] blur-[140px]" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-ink" />
       </div>
 
-      <div className="container-luxe grid items-center gap-16 lg:grid-cols-12 lg:gap-10">
-        <div className="lg:col-span-6 xl:col-span-6">
-          <motion.div {...fade(0.1)} className="flex items-center gap-3">
-            <span aria-hidden className="h-px w-10 bg-gradient-to-r from-transparent to-gold" />
-            <p className="eyebrow">Private trading &amp; capital</p>
-          </motion.div>
+      <div className="container-luxe grid items-center gap-14 lg:grid-cols-12 lg:gap-8">
+        <div className="relative z-10 lg:col-span-6">
+          <motion.p {...fade(0.05)} className="flex items-center gap-3 font-mono label-mono">
+            <span className="text-cyan">&gt;</span>
+            Private desk
+            <span className="text-faint">·</span>
+            <span className="text-gold">Capital &amp; markets</span>
+            <span aria-hidden className="animate-blink inline-block h-3.5 w-1.5 bg-cyan" />
+          </motion.p>
 
           <motion.h1
-            {...fade(0.2)}
-            className="mt-7 font-display text-[3.1rem] leading-[0.95] font-light tracking-[-0.035em] text-bone sm:text-7xl xl:text-[5.75rem]"
+            {...fade(0.15)}
+            className="mt-8 font-display text-[3.4rem] leading-[0.92] font-medium tracking-[-0.04em] text-bone uppercase sm:text-7xl xl:text-[6.25rem]"
           >
-            <span className="block text-[0.32em] font-normal tracking-[0.5em] text-gold uppercase">The</span>
-            <span className="mt-2 block">Neo</span>
-            <span className="block text-gold-gradient animate-shimmer">Syndicate</span>
+            <span className="mb-3 block font-mono text-[0.22em] font-normal tracking-[0.6em] text-cyan">The</span>
+            <span className="block">Neo</span>
+            <ScrambleText text="Syndicate" delay={500} duration={1100} className="block text-gold-gradient animate-shimmer" />
           </motion.h1>
 
           <motion.p
-            {...fade(0.35)}
-            className="mt-8 text-[0.75rem] font-medium tracking-[0.42em] text-bone/90 uppercase sm:text-sm"
+            {...fade(0.3)}
+            className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs tracking-[0.3em] text-bone uppercase sm:text-sm"
           >
-            Capital. Strategy. Execution.
+            <span>Capital.</span>
+            <span aria-hidden className="size-1.5 rotate-45 bg-gold" />
+            <span>Strategy.</span>
+            <span aria-hidden className="size-1.5 rotate-45 bg-gold" />
+            <span className="text-accent">Execution.</span>
           </motion.p>
 
-          <motion.p {...fade(0.45)} className="mt-6 max-w-xl text-base leading-relaxed text-mist sm:text-lg">
+          <motion.p {...fade(0.4)} className="mt-6 max-w-xl text-base leading-relaxed text-mist sm:text-lg">
             A private trading and investment ecosystem built around disciplined execution, market intelligence and
             strategic capital growth.
           </motion.p>
 
-          <motion.div {...fade(0.6)} className="mt-10 flex flex-col gap-3 sm:flex-row">
+          <motion.div {...fade(0.55)} className="mt-10 flex flex-col gap-3 sm:flex-row">
             <ButtonLink href="/invest#apply" size="lg" icon>
               Join the Syndicate
             </ButtonLink>
@@ -64,24 +84,22 @@ export function Hero() {
           </motion.div>
 
           <motion.dl
-            {...fade(0.75)}
-            className="mt-14 grid max-w-lg grid-cols-3 gap-6 border-t border-line pt-7"
+            {...fade(0.7)}
+            className="mt-12 grid max-w-xl grid-cols-3 border-y border-line font-mono"
           >
-            {[
-              ["Focus", "XAUUSD · BTCUSD"],
-              ["Approach", "Risk-first"],
-              ["Access", "Members"],
-            ].map(([k, v]) => (
-              <div key={k}>
-                <dt className="text-[0.5625rem] tracking-[0.26em] text-faint uppercase">{k}</dt>
-                <dd className="mt-2 text-xs text-bone sm:text-sm">{v}</dd>
+            {readouts.map((r) => (
+              <div key={r.code} className="border-r border-line py-4 pr-3 last:border-r-0 [&:not(:first-child)]:pl-4">
+                <dt className="label-mono">
+                  <span className="text-cyan/70 normal-case">{r.code}</span> {r.key}
+                </dt>
+                <dd className="mt-1.5 text-[0.6875rem] tracking-[0.12em] text-bone uppercase">{r.value}</dd>
               </div>
             ))}
           </motion.dl>
         </div>
 
-        <div className="relative mx-auto w-full max-w-xl lg:col-span-6 lg:max-w-none xl:pl-6">
-          <HeroVisual />
+        <div className="relative lg:col-span-6 lg:pr-14 xl:pr-0">
+          <OrbitalCore quotes={snapshot.quotes} source={snapshot.source} />
         </div>
       </div>
     </section>

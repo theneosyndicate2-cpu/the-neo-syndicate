@@ -23,21 +23,24 @@ export function MarketCard({ quote, source, variant = "compact", className }: Ma
   return (
     <article
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-3xl border border-line bg-gradient-to-b from-graphite/80 to-charcoal p-6 transition-all duration-700 hover:-translate-y-1 hover:border-gold/30 hover:shadow-[0_30px_80px_-40px_rgba(201,169,97,0.35)] sm:p-7",
+        "hud group relative flex flex-col overflow-hidden rounded-3xl border border-line bg-gradient-to-b from-graphite/80 to-charcoal p-6 transition-all duration-700 hover:-translate-y-1 hover:border-cyan/30 hover:shadow-[0_30px_80px_-40px_rgba(56,225,255,0.35)] sm:p-7",
         className,
       )}
+      data-spotlight
       aria-label={`${quote.symbol} ${isLive ? "market data" : "demo market data"}`}
     >
       <div aria-hidden className="hairline-gold absolute inset-x-8 top-0 opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
 
       <header className="flex items-start justify-between gap-4">
         <div>
-          <h3 className="font-display text-lg font-medium tracking-[0.14em] text-bone">{quote.symbol}</h3>
+          <h3 className="font-mono text-base font-medium tracking-[0.16em] text-bone">
+            <span className="text-cyan">◆</span> {quote.symbol}
+          </h3>
           <p className="mt-1 text-xs text-muted">{quote.description}</p>
         </div>
         <span
           className={cn(
-            "inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[0.5625rem] tracking-[0.18em] uppercase",
+            "inline-flex items-center gap-1.5 rounded-sm font-mono border px-2 py-0.5 text-[0.5625rem] tracking-[0.18em] uppercase",
             isLive ? "border-up/40 text-up" : "border-gold/30 text-gold",
           )}
         >
@@ -60,14 +63,14 @@ export function MarketCard({ quote, source, variant = "compact", className }: Ma
           {formatSigned(quote.changePercent, 2, "%")}
         </p>
       </div>
-      <p className="tabular mt-2 text-xs text-faint">
+      <p className="tabular mt-2 font-mono text-[0.6875rem] text-faint">
         Day change {formatSigned(quote.change, quote.decimals)} · H {formatNumber(quote.dayHigh, quote.decimals)} · L{" "}
         {formatNumber(quote.dayLow, quote.decimals)}
       </p>
 
       <Sparkline data={quote.history} positive={!(!up && !flat)} className="mt-6 -mx-1" />
 
-      <dl className="mt-5 grid grid-cols-3 gap-3 border-t border-line pt-5 text-[0.6875rem]">
+      <dl className="mt-5 grid grid-cols-3 gap-3 border-t border-line pt-5 font-mono text-[0.6875rem]">
         <div>
           <dt className="tracking-[0.16em] text-faint uppercase">Trend</dt>
           <dd className="mt-1 text-mist">{trendLabel[quote.trend]}</dd>
@@ -87,7 +90,7 @@ export function MarketCard({ quote, source, variant = "compact", className }: Ma
           <p className="mt-6 text-sm leading-relaxed text-mist">{quote.commentary}</p>
           <ul className="mt-6 grid gap-2">
             {quote.keyLevels.map((level) => (
-              <li key={level.label} className="flex items-center justify-between rounded-xl border border-line px-4 py-2.5 text-xs">
+              <li key={level.label} className="flex items-center justify-between rounded-md border border-line bg-ink/40 px-4 py-2.5 font-mono text-xs">
                 <span className="tracking-[0.14em] text-muted uppercase">{level.label}</span>
                 <span className="tabular text-bone">{formatNumber(level.value, quote.decimals)}</span>
               </li>
@@ -96,7 +99,7 @@ export function MarketCard({ quote, source, variant = "compact", className }: Ma
         </>
       )}
 
-      <p className="mt-6 text-[0.625rem] tracking-[0.12em] text-faint uppercase">
+      <p className="mt-6 font-mono label-mono">
         {isLive ? "Last update " : "Reference values · not live · "}
         {formatDateTime(quote.updatedAt)}
       </p>

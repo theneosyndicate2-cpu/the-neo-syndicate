@@ -50,7 +50,7 @@ export default function CommunityPage() {
         eyebrow="The Syndicate community"
         title={
           <>
-            Where disciplined traders <span className="font-serif text-gold-light italic">convene.</span>
+            Where disciplined traders <span className="text-accent">convene.</span>
           </>
         }
         description="A private community for traders and investors who value process, conviction and long-term thinking."

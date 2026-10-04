@@ -25,7 +25,7 @@ export default async function TradesPage() {
         eyebrow="Elite trades"
         title={
           <>
-            The trade <span className="font-serif text-gold-light italic">log.</span>
+            The trade <span className="text-accent">log.</span>
           </>
         }
         description="High-conviction setups across gold and Bitcoin — each with a defined entry, invalidation and staged targets. Wins and losses are recorded alike."

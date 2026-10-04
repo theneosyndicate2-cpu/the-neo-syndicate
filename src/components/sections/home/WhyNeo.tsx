@@ -30,12 +30,13 @@ export function WhyNeo() {
 
         <ol className="grid gap-px overflow-hidden rounded-3xl border border-line bg-line sm:grid-cols-2 lg:col-span-7">
           {principles.map((p, i) => (
-            <Reveal as="li" key={p.title} delay={(i % 2) * 0.08} className="group bg-ink p-7 transition-colors duration-700 hover:bg-charcoal sm:p-8">
+            <Reveal as="li" key={p.title} delay={(i % 2) * 0.08} className="group relative bg-ink p-7 transition-colors duration-700 hover:bg-charcoal sm:p-8">
               <div className="flex items-center gap-4">
-                <span className="grid size-11 place-items-center rounded-2xl border border-line text-gold transition-colors duration-500 group-hover:border-gold/40">
+                <span className="grid size-11 place-items-center rounded-lg border border-line text-gold transition-all duration-500 group-hover:border-cyan/50 group-hover:text-cyan-light group-hover:shadow-[0_0_20px_-6px_rgba(56,225,255,0.8)]">
                   <p.icon className="size-5" strokeWidth={1.3} aria-hidden />
                 </span>
                 <h3 className="font-display text-lg text-bone">{p.title}</h3>
+                <span className="ml-auto font-mono text-[0.625rem] text-faint">0{i + 1}</span>
               </div>
               <p className="mt-5 text-sm leading-relaxed text-mist">{p.body}</p>
             </Reveal>

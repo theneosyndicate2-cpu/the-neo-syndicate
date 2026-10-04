@@ -35,14 +35,14 @@ export function MobileMenu({ open, onClose, isActive }: MobileMenuProps) {
           role="dialog"
           aria-modal="true"
           aria-label="Site menu"
-          className="fixed inset-0 z-40 flex flex-col bg-ink/[0.97] backdrop-blur-2xl lg:hidden"
+          className="fixed inset-0 z-40 flex flex-col bg-ink/[0.97] backdrop-blur-2xl xl:hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.35, delay: 0.1 } }}
           transition={{ duration: 0.4 }}
         >
           <div aria-hidden className="grid-bg pointer-events-none absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
-          <nav aria-label="Mobile" className="container-luxe relative flex flex-1 flex-col overflow-y-auto pt-28 pb-10">
+          <nav aria-label="Mobile" className="container-luxe relative flex flex-1 flex-col overflow-y-auto pt-36 pb-10">
             <ul className="flex flex-col">
               {navLinks.map((link, i) => (
                 <motion.li
@@ -83,7 +83,7 @@ export function MobileMenu({ open, onClose, isActive }: MobileMenuProps) {
                 Join the Syndicate
               </ButtonLink>
               <div className="flex items-center justify-between">
-                <p className="text-[0.625rem] tracking-[0.3em] text-muted uppercase">{siteConfig.tagline}</p>
+                <p className="label-mono">{siteConfig.tagline}</p>
                 <SocialLinks />
               </div>
             </motion.div>

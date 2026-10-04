@@ -16,6 +16,12 @@ export function CTASection({ eyebrow = "The Neo Syndicate", title, description, 
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="absolute top-1/2 left-1/2 h-[22rem] w-[min(48rem,90vw)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/[0.08] blur-[110px]" />
         <div className="grid-bg absolute inset-0 opacity-50 [mask-image:radial-gradient(ellipse_at_center,black_10%,transparent_65%)]" />
+        {/* portal rings */}
+        <div className="absolute top-1/2 left-1/2 size-[44rem] -translate-x-1/2 -translate-y-1/2 [mask-image:radial-gradient(circle,black_40%,transparent_70%)]">
+          <div className="animate-spin-slower absolute inset-0 rounded-full border border-dashed border-cyan/15" />
+          <div className="animate-spin-rev absolute inset-[12%] rounded-full border border-gold/15" />
+          <div className="animate-spin-slow absolute inset-[24%] rounded-full border-2 border-transparent border-t-cyan/40 border-r-cyan/10" />
+        </div>
       </div>
       <div className="container-luxe relative">
         <Reveal className="mx-auto max-w-3xl text-center">

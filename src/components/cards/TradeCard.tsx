@@ -12,7 +12,7 @@ export function DirectionPill({ direction }: { direction: Trade["direction"] }) 
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-md px-2 py-0.5 text-[0.625rem] font-semibold tracking-[0.18em]",
+        "inline-flex items-center rounded-sm px-2 py-0.5 font-mono text-[0.625rem] font-semibold tracking-[0.18em]",
         direction === "BUY" ? "bg-up/15 text-up" : "bg-down/15 text-down",
       )}
     >
@@ -26,7 +26,7 @@ export function ResultPill({ trade }: { trade: Trade }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[0.625rem] font-medium tracking-[0.16em] uppercase",
+        "inline-flex items-center gap-1.5 rounded-sm font-mono border px-2.5 py-0.5 text-[0.625rem] font-medium tracking-[0.16em] uppercase",
         resultTone[trade.result],
       )}
     >
@@ -44,30 +44,31 @@ export function TradeCard({ trade, className }: { trade: Trade; className?: stri
   return (
     <article
       className={cn(
-        "group relative flex flex-col rounded-3xl border border-line bg-charcoal p-6 transition-all duration-700 hover:border-gold/30 sm:p-7",
+        "hud group relative flex flex-col overflow-hidden rounded-3xl border border-line bg-charcoal p-6 transition-all duration-700 hover:border-cyan/30 sm:p-7",
         className,
       )}
+      data-spotlight
     >
       <header className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <h3 className="font-display text-lg tracking-[0.12em] text-bone">{trade.asset}</h3>
+          <h3 className="font-mono text-base tracking-[0.14em] text-bone">{trade.asset}</h3>
           <DirectionPill direction={trade.direction} />
         </div>
         <ResultPill trade={trade} />
       </header>
 
-      <dl className="tabular mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line text-sm">
+      <dl className="tabular mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line font-mono text-sm">
         <div className="bg-night p-3.5">
-          <dt className="text-[0.625rem] tracking-[0.2em] text-faint uppercase">Entry</dt>
+          <dt className="label-mono">Entry</dt>
           <dd className="mt-1 text-bone">{formatNumber(trade.entry, d)}</dd>
         </div>
         <div className="bg-night p-3.5">
-          <dt className="text-[0.625rem] tracking-[0.2em] text-faint uppercase">Stop loss</dt>
+          <dt className="label-mono">Stop loss</dt>
           <dd className="mt-1 text-down/90">{formatNumber(trade.stopLoss, d)}</dd>
         </div>
         {trade.takeProfits.map((tp, i) => (
           <div key={i} className={cn("bg-night p-3.5", i === 2 && "col-span-2")}>
-            <dt className="text-[0.625rem] tracking-[0.2em] text-faint uppercase">TP{i + 1}</dt>
+            <dt className="label-mono">TP{i + 1}</dt>
             <dd className="mt-1 text-up/90">{formatNumber(tp, d)}</dd>
           </div>
         ))}
@@ -75,7 +76,7 @@ export function TradeCard({ trade, className }: { trade: Trade; className?: stri
 
       {trade.note && <p className="mt-5 text-sm leading-relaxed text-mist">{trade.note}</p>}
 
-      <footer className="mt-auto flex items-center justify-between pt-6 text-[0.625rem] tracking-[0.16em] text-faint uppercase">
+      <footer className="mt-auto flex items-center justify-between pt-6 font-mono label-mono">
         <span>{trade.id}</span>
         <time dateTime={trade.date}>{formatDate(trade.date)}</time>
       </footer>

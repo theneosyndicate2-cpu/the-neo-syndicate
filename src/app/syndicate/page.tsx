@@ -78,7 +78,7 @@ export default function SyndicatePage() {
         eyebrow="The Syndicate"
         title={
           <>
-            Discipline is the <span className="font-serif text-gold-light italic">edge.</span>
+            Discipline is the <span className="text-accent">edge.</span>
           </>
         }
         description="The Neo Syndicate exists for traders and investors who want a serious, process-driven approach to the markets — and a community that holds the same standard."
@@ -138,7 +138,7 @@ export default function SyndicatePage() {
               {neverList.map((item) => (
                 <li key={item} className="flex items-center justify-between px-6 py-5 sm:px-8">
                   <span className="font-display text-lg text-mist line-through decoration-gold/60 decoration-1">{item}</span>
-                  <span className="text-[0.625rem] tracking-[0.2em] text-faint uppercase">Never</span>
+                  <span className="label-mono">Never</span>
                 </li>
               ))}
             </ul>

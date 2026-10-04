@@ -14,7 +14,7 @@ interface StatCardProps {
 export function StatCard({ label, value, prefix, suffix, decimals = 0, caption, className }: StatCardProps) {
   return (
     <div className={cn("relative flex flex-col justify-between gap-6 bg-charcoal p-6 sm:p-8", className)}>
-      <p className="text-[0.6875rem] tracking-[0.22em] text-muted uppercase">{label}</p>
+      <p className="label-mono">{label}</p>
       <div>
         <Counter
           value={value}

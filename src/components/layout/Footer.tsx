@@ -24,7 +24,7 @@ export function Footer() {
 
           <div className="grid grid-cols-2 gap-10 lg:col-span-7 lg:grid-cols-3">
             <div>
-              <p className="text-[0.625rem] tracking-[0.28em] text-faint uppercase">Explore</p>
+              <p className="label-mono">Explore</p>
               <ul className="mt-5 space-y-3">
                 {navLinks.map((l) => (
                   <li key={l.href}>
@@ -36,7 +36,7 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <p className="text-[0.625rem] tracking-[0.28em] text-faint uppercase">Legal</p>
+              <p className="label-mono">Legal</p>
               <ul className="mt-5 space-y-3">
                 {legalLinks.map((l) => (
                   <li key={l.href}>
@@ -48,7 +48,7 @@ export function Footer() {
               </ul>
             </div>
             <div className="col-span-2 lg:col-span-1">
-              <p className="text-[0.625rem] tracking-[0.28em] text-faint uppercase">Desk</p>
+              <p className="label-mono">Desk</p>
               <ul className="mt-5 space-y-3 text-sm text-mist">
                 <li>
                   <a href={`mailto:${siteConfig.email}`} className="transition-colors hover:text-gold-light">

@@ -18,14 +18,14 @@ export function PerformanceCard({ summary, className }: { summary: PerformanceSu
     <div className={cn("relative overflow-hidden rounded-3xl border border-line bg-charcoal p-6 sm:p-8", className)}>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-[0.6875rem] tracking-[0.22em] text-muted uppercase">Historical performance</p>
+          <p className="label-mono">Historical performance</p>
           <p className="mt-3 flex items-baseline gap-2">
             <span className="tabular font-display text-4xl font-light text-bone">{formatSigned(total, 1, "R")}</span>
             <span className="text-xs text-faint">cumulative, 6 months</span>
           </p>
         </div>
         {isDemo && (
-          <span className="rounded-full border border-gold/40 bg-gold/[0.06] px-3 py-1 text-[0.5625rem] tracking-[0.2em] text-gold-light uppercase">
+          <span className="rounded-sm font-mono border border-gold/40 bg-gold/[0.06] px-3 py-1 text-[0.5625rem] tracking-[0.2em] text-gold-light uppercase">
             Illustrative · Demo data
           </span>
         )}
@@ -70,7 +70,7 @@ export function PerformanceCard({ summary, className }: { summary: PerformanceSu
       </div>
       <div className="mt-3 grid grid-cols-6 gap-3 sm:gap-5" aria-hidden>
         {summary.history.map((h) => (
-          <span key={h.label} className="text-center text-[0.625rem] tracking-[0.18em] text-faint uppercase">
+          <span key={h.label} className="text-center label-mono">
             {h.label}
           </span>
         ))}

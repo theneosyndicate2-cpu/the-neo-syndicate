@@ -15,7 +15,7 @@ export function PoolsPreview({ pools }: { pools: InvestmentPool[] }) {
           eyebrow="Investment pools"
           title={
             <span id="pools-heading">
-              Strategic capital. <span className="font-serif text-gold-light italic">Disciplined execution.</span>
+              Strategic capital. <span className="text-accent">Disciplined execution.</span>
             </span>
           }
           description="Investment pools give qualified members structured access to selected Syndicate strategies — with defined durations, defined risk parameters and clear reporting."

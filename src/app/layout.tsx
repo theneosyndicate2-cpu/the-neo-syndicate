@@ -1,22 +1,24 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Inter, Inter_Tight } from "next/font/google";
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { siteConfig } from "@/lib/site";
+import { getMarketSnapshot } from "@/services/marketData";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { TickerTape } from "@/components/layout/TickerTape";
+import { PointerFX } from "@/components/visuals/PointerFX";
 import "./globals.css";
 
 const sans = Inter({ subsets: ["latin"], variable: "--nf-sans", display: "swap" });
-const display = Inter_Tight({
+const display = Space_Grotesk({
   subsets: ["latin"],
   variable: "--nf-display",
   weight: ["300", "400", "500"],
   display: "swap",
 });
-const serif = Cormorant_Garamond({
+const mono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--nf-serif",
+  variable: "--nf-mono",
   weight: ["400", "500"],
-  style: ["italic"],
   display: "swap",
 });
 
@@ -50,7 +52,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#050506",
+  themeColor: "#030405",
   colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
@@ -66,17 +68,24 @@ const organizationJsonLd = {
   email: siteConfig.email,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const snapshot = await getMarketSnapshot();
   return (
-    <html lang="en-GB" className={`${sans.variable} ${display.variable} ${serif.variable}`}>
-      <body className="min-h-screen bg-ink">
+    <html lang="en-GB" className={`${sans.variable} ${display.variable} ${mono.variable}`}>
+      <body className="min-h-screen">
         <a
           href="#main"
-          className="fixed top-3 left-3 z-[100] -translate-y-20 rounded-full bg-gold px-4 py-2 text-xs font-medium text-ink transition-transform focus:translate-y-0"
+          className="fixed top-3 left-3 z-[100] -translate-y-24 bg-gold px-4 py-2 font-mono text-xs font-medium text-ink transition-transform focus:translate-y-0"
         >
           Skip to content
         </a>
-        <Navbar />
+        {/* Ambient terminal backdrop */}
+        <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
+          <div className="dot-bg absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_75%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(56,225,255,0.05),transparent_60%)]" />
+        </div>
+        <PointerFX />
+        <Navbar ticker={<TickerTape snapshot={snapshot} />} />
         <main id="main">{children}</main>
         <Footer />
         <script

@@ -65,7 +65,7 @@ export function TradesDashboard({ trades, source }: { trades: Trade[]; source: D
           { label: "Net result", value: formatSigned(stats.totalR, 1, "R") },
         ].map((s) => (
           <div key={s.label} className="bg-charcoal p-5 sm:p-7">
-            <p className="text-[0.625rem] tracking-[0.22em] text-faint uppercase">{s.label}</p>
+            <p className="label-mono">{s.label}</p>
             <p className="tabular mt-3 font-display text-2xl font-light text-bone sm:text-3xl">{s.value}</p>
           </div>
         ))}
@@ -74,8 +74,8 @@ export function TradesDashboard({ trades, source }: { trades: Trade[]; source: D
       {/* Toolbar */}
       <div className="mt-8 flex flex-col gap-5 rounded-3xl border border-line bg-night p-4 sm:p-5 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-6">
-          <p className="flex items-center gap-2 text-[0.625rem] tracking-[0.22em] text-muted uppercase">
-            <SlidersHorizontal className="size-3.5 text-gold" aria-hidden />
+          <p className="flex items-center gap-2 label-mono">
+            <SlidersHorizontal className="size-3.5 text-cyan" aria-hidden />
             Filters {activeCount > 0 && <span className="text-gold-light">({activeCount})</span>}
           </p>
           <div className="flex flex-wrap gap-x-5 gap-y-3">
@@ -90,10 +90,10 @@ export function TradesDashboard({ trades, source }: { trades: Trade[]; source: D
                       aria-pressed={active}
                       onClick={() => toggle(g.key, opt)}
                       className={cn(
-                        "h-9 rounded-full border px-3.5 text-[0.625rem] font-medium tracking-[0.16em] transition-all duration-300",
+                        "h-9 rounded-sm font-mono border px-3.5 text-[0.625rem] font-medium tracking-[0.16em] transition-all duration-300",
                         active
-                          ? "border-gold/60 bg-gold/15 text-gold-light"
-                          : "border-line-strong text-mist hover:border-gold/40 hover:text-bone",
+                          ? "border-cyan/70 bg-cyan/15 text-cyan-light shadow-[0_0_16px_-4px_rgba(56,225,255,0.7)]"
+                          : "border-line-strong text-mist hover:border-cyan/40 hover:text-bone",
                       )}
                     >
                       {opt}
@@ -109,7 +109,7 @@ export function TradesDashboard({ trades, source }: { trades: Trade[]; source: D
             type="button"
             onClick={() => setFilters(initial)}
             disabled={!activeCount}
-            className="text-[0.625rem] tracking-[0.2em] text-muted uppercase transition-colors hover:text-gold-light disabled:opacity-40"
+            className="label-mono transition-colors hover:text-gold-light disabled:opacity-40"
           >
             Reset
           </button>
@@ -155,7 +155,7 @@ export function TradesDashboard({ trades, source }: { trades: Trade[]; source: D
           <div className={cn("mt-6 overflow-hidden rounded-3xl border border-line", view === "table" ? "hidden md:block" : "hidden")}>
             <table className="tabular w-full text-left text-sm">
               <caption className="sr-only">Trade log{source === "demo" ? " (demo data)" : ""}</caption>
-              <thead className="bg-night text-[0.625rem] tracking-[0.2em] text-faint uppercase">
+              <thead className="bg-night label-mono">
                 <tr>
                   {["Asset", "Direction", "Entry", "Stop loss", "Take profit", "Result", "Date", "Status"].map((h) => (
                     <th key={h} scope="col" className="px-5 py-4 font-medium">
@@ -200,7 +200,7 @@ export function TradesDashboard({ trades, source }: { trades: Trade[]; source: D
                         <td className="px-5 py-4 text-xs text-mist">
                           <time dateTime={t.date}>{formatDate(t.date)}</time>
                         </td>
-                        <td className="px-5 py-4 text-[0.625rem] tracking-[0.18em] text-muted uppercase">{t.status}</td>
+                        <td className="px-5 py-4 label-mono">{t.status}</td>
                       </motion.tr>
                     );
                   })}

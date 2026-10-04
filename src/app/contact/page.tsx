@@ -20,7 +20,7 @@ export default function ContactPage() {
         eyebrow="Contact"
         title={
           <>
-            Speak with <span className="font-serif text-gold-light italic">the desk.</span>
+            Speak with <span className="text-accent">the desk.</span>
           </>
         }
         description="Questions about membership, investment pools or partnerships — we read every message."
@@ -37,7 +37,7 @@ export default function ContactPage() {
               <div key={item.label} className="flex gap-4 rounded-3xl border border-line bg-charcoal p-6">
                 <item.icon className="mt-0.5 size-5 shrink-0 text-gold" strokeWidth={1.3} aria-hidden />
                 <div>
-                  <p className="text-[0.625rem] tracking-[0.22em] text-faint uppercase">{item.label}</p>
+                  <p className="label-mono">{item.label}</p>
                   {item.href ? (
                     <a href={item.href} className="mt-1.5 block text-sm break-all text-bone hover:text-gold-light">
                       {item.value}
@@ -49,7 +49,7 @@ export default function ContactPage() {
               </div>
             ))}
             <div className="rounded-3xl border border-line bg-charcoal p-6">
-              <p className="text-[0.625rem] tracking-[0.22em] text-faint uppercase">Follow</p>
+              <p className="label-mono">Follow</p>
               <SocialLinks className="mt-4" />
             </div>
           </Reveal>

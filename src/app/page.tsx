@@ -24,7 +24,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <Hero />
+      <Hero snapshot={snapshot} />
       <MarketSnapshot snapshot={snapshot} />
       <WhatWeDo />
       <WhyNeo />

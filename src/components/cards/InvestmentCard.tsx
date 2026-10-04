@@ -23,19 +23,20 @@ export function InvestmentCard({ pool, variant = "full", featured, className }: 
   return (
     <article
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-3xl border p-7 transition-all duration-700 hover:-translate-y-1 sm:p-8",
+        "hud group relative flex flex-col overflow-hidden rounded-3xl border p-7 transition-all duration-700 hover:-translate-y-1 sm:p-8",
         featured
-          ? "border-gold/40 bg-gradient-to-b from-gold/[0.08] via-charcoal to-charcoal shadow-[0_40px_100px_-50px_rgba(201,169,97,0.5)]"
-          : "border-line bg-charcoal hover:border-gold/30",
+          ? "border-gold/40 bg-gradient-to-b from-gold/[0.08] via-charcoal to-charcoal shadow-[0_40px_100px_-50px_rgba(212,175,95,0.5)]"
+          : "hud-cyan border-line bg-charcoal hover:border-cyan/30",
         className,
       )}
+      data-spotlight
     >
       {featured && <div aria-hidden className="hairline-gold absolute inset-x-0 top-0" />}
       <header className="flex min-h-10 items-start justify-between gap-3">
         <p className="eyebrow">{pool.tagline}</p>
         <span
           className={cn(
-            "rounded-full border px-2.5 py-0.5 text-[0.5625rem] font-medium tracking-[0.2em] whitespace-nowrap uppercase",
+            "rounded-sm font-mono border px-2.5 py-0.5 text-[0.5625rem] font-medium tracking-[0.2em] whitespace-nowrap uppercase",
             statusTone[pool.status],
           )}
         >
@@ -55,11 +56,11 @@ export function InvestmentCard({ pool, variant = "full", featured, className }: 
 
       <dl className="mt-6 grid grid-cols-2 gap-4 border-y border-line py-5 text-sm">
         <div>
-          <dt className="text-[0.625rem] tracking-[0.2em] text-faint uppercase">Duration</dt>
+          <dt className="label-mono">Duration</dt>
           <dd className="mt-1 text-bone">{pool.duration}</dd>
         </div>
         <div>
-          <dt className="text-[0.625rem] tracking-[0.2em] text-faint uppercase">Risk level</dt>
+          <dt className="label-mono">Risk level</dt>
           <dd className="mt-1.5 flex items-center gap-2 text-bone">
             <span className="flex gap-0.5" aria-hidden>
               {[1, 2, 3, 4].map((n) => (
@@ -71,7 +72,7 @@ export function InvestmentCard({ pool, variant = "full", featured, className }: 
         </div>
         {variant === "full" && (
           <div className="col-span-2">
-            <dt className="text-[0.625rem] tracking-[0.2em] text-faint uppercase">Markets</dt>
+            <dt className="label-mono">Markets</dt>
             <dd className="mt-1 text-bone">{pool.markets.join(" · ")}</dd>
           </div>
         )}
