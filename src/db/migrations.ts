@@ -71,4 +71,25 @@ export const migrations: { id: string; sql: string }[] = [
        'member', false);
     `,
   },
+  {
+    id: "0003_trades",
+    sql: /* sql */ `
+      CREATE TABLE IF NOT EXISTS trades (
+        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+        code text NOT NULL UNIQUE,
+        asset text NOT NULL,
+        direction text NOT NULL,
+        entry double precision NOT NULL,
+        stop_loss double precision NOT NULL,
+        take_profits double precision[] NOT NULL,
+        result text NOT NULL DEFAULT 'PENDING',
+        status text NOT NULL DEFAULT 'OPEN',
+        r_multiple double precision,
+        note text,
+        opened_at timestamptz NOT NULL DEFAULT now(),
+        created_at timestamptz NOT NULL DEFAULT now()
+      );
+      CREATE INDEX IF NOT EXISTS trades_opened_idx ON trades(opened_at);
+    `,
+  },
 ];

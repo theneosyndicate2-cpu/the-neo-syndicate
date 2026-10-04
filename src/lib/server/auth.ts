@@ -3,7 +3,7 @@ import { createHash, randomBytes, scrypt as scryptCb, timingSafeEqual } from "no
 import { promisify } from "node:util";
 import { cache } from "react";
 import { cookies, headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { and, eq, gt } from "drizzle-orm";
 import { getDb, schema } from "@/db";
 import { hasTier } from "@/lib/tiers";
@@ -124,6 +124,26 @@ export const getCurrentUser = cache(async (): Promise<SessionUser | null> => {
 export async function requireUser(nextPath = "/portal"): Promise<SessionUser> {
   const user = await getCurrentUser();
   if (!user) redirect(`/login?next=${encodeURIComponent(nextPath)}`);
+  return user;
+}
+
+/**
+ * Admins: accounts with role "admin", or whose email is listed in ADMIN_EMAILS
+ * (comma-separated). The env list means no admin password ever lives in code.
+ */
+const adminEmails = () =>
+  (process.env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+
+export const isAdmin = (user: Pick<SessionUser, "role" | "email"> | null) =>
+  !!user && (user.role === "admin" || adminEmails().includes(user.email));
+
+/** Admin-only pages/actions. Non-admins get a 404 so the area isn't advertised. */
+export async function requireAdmin(nextPath = "/admin"): Promise<SessionUser> {
+  const user = await requireUser(nextPath);
+  if (!isAdmin(user)) notFound();
   return user;
 }
 

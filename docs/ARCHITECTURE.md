@@ -75,6 +75,18 @@ counters are in-memory per instance; move them to Redis/the database when runnin
 - Risk wording is intentionally minimal: a one-line footer link, the `/risk-disclosure` page and the
   acknowledgement tickbox on the investment application.
 
+### Admin desk (`/admin`)
+- **Access:** accounts whose email is in `ADMIN_EMAILS`, or whose role is `admin`. Non-admins get a 404; signed-out
+  visitors are sent to sign-in. No admin password exists in code.
+- **Overview:** members by tier, pending/approved applications, desk trade count, latest activity.
+- **Applications:** filter by status; move received → under review → approved/declined, optionally setting the
+  applicant's tier in the same step.
+- **Members:** search; change tier and role (admins can't remove their own admin role).
+- **Trades:** post trades (direction-aware validation of SL/TPs), close as win/loss/breakeven with R result,
+  delete. Once any desk trade exists it replaces the sample trades everywhere.
+- **Announcements:** publish to a tier and above, optional pin; delete.
+- Mutations are Server Actions in `src/app/admin/actions.ts`, each re-checking admin rights.
+
 ### Member accounts & portal
 - **Database:** Drizzle ORM on PostgreSQL. No `DATABASE_URL` → embedded PGlite in `.data/pglite` (local only).
   Set `DATABASE_URL` in production. Schema: `src/db/schema.ts`; SQL migrations in `src/db/migrations.ts` run

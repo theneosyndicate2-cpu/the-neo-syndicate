@@ -136,7 +136,7 @@ export function TradesDashboard({ trades, source }: { trades: Trade[]; source: D
       </div>
 
       <div className="mt-4 flex items-center justify-between">
-        <DataSourceBadge source={source} label={source === "demo" ? "Sample trades · demo data" : undefined} />
+        <DataSourceBadge source={source} label={source === "demo" ? "Sample trades · demo data" : "Desk trade log"} />
         <p className="text-xs text-faint" aria-live="polite">
           {filtered.length} of {trades.length} trades
         </p>

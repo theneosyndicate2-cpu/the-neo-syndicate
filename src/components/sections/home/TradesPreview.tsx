@@ -16,7 +16,7 @@ export function TradesPreview({ trades, source }: { trades: Trade[]; source: Dat
             title={<span id="trades-heading">Every idea has an entry, an exit and an invalidation.</span>}
           />
           <Reveal delay={0.1}>
-            <DataSourceBadge source={source} label={source === "demo" ? "Sample trades · demo data" : undefined} />
+            <DataSourceBadge source={source} label={source === "demo" ? "Sample trades · demo data" : "Desk trade log"} />
           </Reveal>
         </div>
 

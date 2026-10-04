@@ -25,5 +25,6 @@ export const config = {
     "/invest/:path*",
     "/community/:path*",
     "/portal/:path*",
+    "/admin/:path*",
   ],
 };

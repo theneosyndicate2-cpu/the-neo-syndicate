@@ -1,4 +1,4 @@
-import { boolean, index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, doublePrecision, index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 /**
  * Database schema (PostgreSQL). Mirrors src/db/migrations.ts — when you
@@ -68,6 +68,30 @@ export const announcements = pgTable("announcements", {
   publishedAt: timestamp("published_at", { withTimezone: true }).notNull().defaultNow(),
 });
 
+export const trades = pgTable(
+  "trades",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    /** Human-readable reference, e.g. NS-1043. */
+    code: text("code").notNull().unique(),
+    asset: text("asset").notNull(),
+    direction: text("direction").notNull(),
+    entry: doublePrecision("entry").notNull(),
+    stopLoss: doublePrecision("stop_loss").notNull(),
+    takeProfits: doublePrecision("take_profits").array().notNull(),
+    /** WIN | LOSS | BREAKEVEN | PENDING */
+    result: text("result").notNull().default("PENDING"),
+    /** OPEN | CLOSED */
+    status: text("status").notNull().default("OPEN"),
+    rMultiple: doublePrecision("r_multiple"),
+    note: text("note"),
+    openedAt: timestamp("opened_at", { withTimezone: true }).notNull().defaultNow(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  },
+  (t) => [index("trades_opened_idx").on(t.openedAt)],
+);
+
 export type UserRow = typeof users.$inferSelect;
+export type TradeRow = typeof trades.$inferSelect;
 export type ApplicationRow = typeof applications.$inferSelect;
 export type AnnouncementRow = typeof announcements.$inferSelect;
