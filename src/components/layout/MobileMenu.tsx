@@ -45,7 +45,7 @@ export function MobileMenu({ open, onClose, isActive, signedIn }: MobileMenuProp
           <div aria-hidden className="grid-bg pointer-events-none absolute inset-0 opacity-40 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
           <nav aria-label="Mobile" className="container-luxe relative flex flex-1 flex-col overflow-y-auto pt-36 pb-10">
             <ul className="flex flex-col">
-              {navLinks.map((link, i) => (
+              {(signedIn ? navLinks : [{ href: "/", label: "Home" }, { href: "/contact", label: "Contact" }]).map((link, i) => (
                 <motion.li
                   key={link.href}
                   initial={{ opacity: 0, y: 18 }}
@@ -80,8 +80,8 @@ export function MobileMenu({ open, onClose, isActive, signedIn }: MobileMenuProp
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <ButtonLink href={signedIn ? "/portal" : "/invest#apply"} size="lg" icon className="w-full" onClick={onClose}>
-                {signedIn ? "Member portal" : "Join the Syndicate"}
+              <ButtonLink href={signedIn ? "/portal" : "/signup"} size="lg" icon className="w-full" onClick={onClose}>
+                {signedIn ? "Member portal" : "Request access"}
               </ButtonLink>
               {!signedIn && (
                 <ButtonLink href="/login" size="lg" variant="secondary" className="w-full" onClick={onClose}>

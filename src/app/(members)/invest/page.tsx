@@ -2,10 +2,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ClipboardCheck, FileSearch, MessagesSquare, ShieldCheck } from "lucide-react";
 import { pageMetadata } from "@/lib/seo";
-import { INVESTMENT_RISK_LINE, RISK_DISCLAIMER_FULL } from "@/lib/site";
 import { getInvestmentPools } from "@/services/pools";
 import { PageHero } from "@/components/sections/PageHero";
-import { RiskDisclosure } from "@/components/sections/RiskDisclosure";
 import { InvestmentCard } from "@/components/cards/InvestmentCard";
 import { ApplicationForm } from "@/components/forms/ApplicationForm";
 import { Badge } from "@/components/ui/Badge";
@@ -51,13 +49,7 @@ export default async function InvestPage() {
         </div>
       </PageHero>
 
-      <section className="container-luxe">
-        <Reveal>
-          <RiskDisclosure title="Important — read before applying" text={RISK_DISCLAIMER_FULL} />
-        </Reveal>
-      </section>
-
-      <section id="pools" aria-labelledby="pools-list-heading" className="scroll-mt-24 py-24 sm:py-28">
+      <section id="pools" aria-labelledby="pools-list-heading" className="scroll-mt-24 pb-24 sm:pb-28">
         <div className="container-luxe">
           <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
             <SectionHeading eyebrow="Current pools" title={<span id="pools-list-heading">Opportunities</span>} />
@@ -74,11 +66,11 @@ export default async function InvestPage() {
               </Reveal>
             ))}
           </div>
-          <p className="mt-8 max-w-3xl text-xs leading-relaxed text-faint">
-            {INVESTMENT_RISK_LINE} Pool terms, minimums and availability shown are placeholders and may change. Nothing
-            on this page is an offer, solicitation or invitation to invest, and no returns are promised or implied.
-            Participation is subject to eligibility, suitability review and applicable law in your jurisdiction.
-          </p>
+          {placeholder && (
+            <p className="mt-8 max-w-3xl text-xs leading-relaxed text-faint">
+              Pool terms, minimums and availability shown are placeholders and may change.
+            </p>
+          )}
         </div>
       </section>
 

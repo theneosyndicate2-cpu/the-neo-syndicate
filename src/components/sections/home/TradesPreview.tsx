@@ -1,11 +1,9 @@
 import type { DataSource, Trade } from "@/lib/types";
-import { TRADES_RISK_LINE } from "@/lib/site";
 import { TradeCard } from "@/components/cards/TradeCard";
 import { DataSourceBadge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { RiskDisclosure } from "@/components/sections/RiskDisclosure";
 
 export function TradesPreview({ trades, source }: { trades: Trade[]; source: DataSource }) {
   return (
@@ -30,8 +28,7 @@ export function TradesPreview({ trades, source }: { trades: Trade[]; source: Dat
           ))}
         </div>
 
-        <Reveal className="mt-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <RiskDisclosure variant="inline" text={TRADES_RISK_LINE} className="max-w-xl text-sm" />
+        <Reveal className="mt-10 flex justify-end">
           <ButtonLink href="/trades" size="lg" icon>
             Access elite trades
           </ButtonLink>

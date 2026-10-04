@@ -38,11 +38,6 @@ export const legalLinks = [
 export const RISK_DISCLAIMER_FULL =
   "Trading and investing involve substantial risk, including the possible loss of capital. Past performance is not indicative of future results. Information provided by The Neo Syndicate is for informational and educational purposes and should not be considered financial advice. Users should conduct their own research and seek independent professional advice where appropriate.";
 
-export const RISK_DISCLAIMER_SHORT =
-  "Trading and investing involve substantial risk, including the possible loss of capital. Past performance is not indicative of future results. Nothing on this website is financial advice.";
-
+/** Used by the investment-application acknowledgement tickbox. */
 export const INVESTMENT_RISK_LINE =
   "All investment activity involves risk. Past performance does not guarantee future results.";
-
-export const TRADES_RISK_LINE =
-  "Trading involves substantial risk. Signals are educational/informational and are not guarantees of future results.";

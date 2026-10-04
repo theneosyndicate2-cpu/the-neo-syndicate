@@ -1,7 +1,6 @@
 import { pageMetadata } from "@/lib/seo";
 import { PageHero } from "@/components/sections/PageHero";
 import { CTASection } from "@/components/sections/CTASection";
-import { RiskDisclosure } from "@/components/sections/RiskDisclosure";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 
@@ -64,7 +63,7 @@ const chapters = [
     title: "Losses are planned for. Never hidden.",
     body: [
       "Every trade can lose. We define risk per idea before entry, cap exposure across correlated positions and log losing trades with the same prominence as winning ones.",
-      "Nothing we publish is a guarantee or personal financial advice. Members are expected to size positions according to their own circumstances and to seek independent advice where appropriate.",
+      "Position sizing is personal. The desk shares the framework; every member sizes each idea to their own capital and owns the decision.",
     ],
   },
 ];
@@ -143,9 +142,6 @@ export default function SyndicatePage() {
               ))}
             </ul>
           </Reveal>
-        </div>
-        <div className="container-luxe mt-16">
-          <RiskDisclosure />
         </div>
       </section>
 

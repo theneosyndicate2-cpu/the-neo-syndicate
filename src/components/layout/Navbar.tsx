@@ -52,7 +52,7 @@ export function Navbar({ ticker }: { ticker?: ReactNode }) {
           </Link>
 
           <ul className="hidden items-center gap-0.5 xl:flex">
-            {navLinks.map((link) => (
+            {(me ? navLinks : []).map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
@@ -100,11 +100,11 @@ export function Navbar({ ticker }: { ticker?: ReactNode }) {
                 className="flex items-center gap-2 font-mono text-[0.6875rem] tracking-[0.1em] whitespace-nowrap text-muted uppercase transition-colors hover:text-cyan-light"
               >
                 <UserRound className="size-4" aria-hidden />
-                <span className="sr-only 2xl:not-sr-only">Sign in</span>
+                Sign in
               </Link>
             )}
-            <ButtonLink href={me ? "/portal" : "/invest#apply"} size="sm" className="h-10 px-5">
-              {me ? "Member portal" : "Join the Syndicate"}
+            <ButtonLink href={me ? "/portal" : "/signup"} size="sm" className="h-10 px-5">
+              {me ? "Member portal" : "Request access"}
             </ButtonLink>
           </div>
 

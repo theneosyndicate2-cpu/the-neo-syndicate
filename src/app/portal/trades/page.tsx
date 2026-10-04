@@ -1,10 +1,8 @@
 import { getCurrentUser } from "@/lib/server/auth";
 import { hasTier } from "@/lib/tiers";
-import { TRADES_RISK_LINE } from "@/lib/site";
 import { getTrades } from "@/services/trades";
 import { TradesDashboard } from "@/components/trades/TradesDashboard";
 import { LockedPanel } from "@/components/portal/LockedPanel";
-import { RiskDisclosure } from "@/components/sections/RiskDisclosure";
 
 export const metadata = { title: "Elite trades" };
 
@@ -19,10 +17,7 @@ export default async function PortalTradesPage() {
         <h1 className="mt-4 font-display text-3xl font-light tracking-[-0.02em] text-bone sm:text-4xl">Full trade log</h1>
       </header>
       {allowed ? (
-        <>
-          <TradesDashboard {...await getTrades()} />
-          <RiskDisclosure variant="inline" text={TRADES_RISK_LINE} />
-        </>
+        <TradesDashboard {...await getTrades()} />
       ) : (
         <LockedPanel
           requiredTier="member"

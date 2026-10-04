@@ -1,10 +1,8 @@
 import type { InvestmentPool } from "@/lib/types";
-import { INVESTMENT_RISK_LINE } from "@/lib/site";
 import { InvestmentCard } from "@/components/cards/InvestmentCard";
 import { ButtonLink } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { RiskDisclosure } from "@/components/sections/RiskDisclosure";
 
 export function PoolsPreview({ pools }: { pools: InvestmentPool[] }) {
   return (
@@ -29,8 +27,7 @@ export function PoolsPreview({ pools }: { pools: InvestmentPool[] }) {
           ))}
         </div>
 
-        <Reveal className="mt-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-          <RiskDisclosure variant="inline" text={INVESTMENT_RISK_LINE} className="max-w-xl text-sm" />
+        <Reveal className="mt-10 flex justify-end">
           <ButtonLink href="/invest" size="lg" variant="secondary" icon>
             View investment opportunities
           </ButtonLink>

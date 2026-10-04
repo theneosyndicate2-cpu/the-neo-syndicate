@@ -95,7 +95,7 @@ export default function CommunityPage() {
             <SocialLinks variant="cards" className="mt-14" />
           </Reveal>
           <Reveal className="mt-10">
-            <RiskDisclosure variant="inline" text="Community content is for educational and informational purposes only and is not financial advice. Beware of impersonators — we will never DM you first asking for funds, passwords or seed phrases." />
+            <RiskDisclosure variant="inline" text="Beware of impersonators — we will never DM you first asking for funds, passwords or seed phrases." />
           </Reveal>
         </div>
       </section>

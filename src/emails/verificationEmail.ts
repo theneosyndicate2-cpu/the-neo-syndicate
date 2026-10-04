@@ -46,7 +46,7 @@ export function verificationEmail({ code, minutes }: { code: string; minutes: nu
           <div style="font-size:11px;letter-spacing:4px;color:#d4af5f;">${siteConfig.signature.toUpperCase()}</div>
         </td></tr>
       </table>
-      <p style="margin:18px 0 0;font-size:11px;color:#525b61;">Trading and investing involve substantial risk, including the possible loss of capital.</p>
+      <p style="margin:18px 0 0;font-size:11px;color:#525b61;">The Neo Syndicate · Private members' desk</p>
     </td></tr>
   </table>
 </body>

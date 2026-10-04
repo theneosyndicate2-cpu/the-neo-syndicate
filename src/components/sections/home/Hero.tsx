@@ -14,7 +14,7 @@ const readouts = [
   { code: "0x03", key: "Access", value: "By application" },
 ];
 
-export function Hero({ snapshot }: { snapshot: MarketSnapshot }) {
+export function Hero({ snapshot, member = false }: { snapshot: MarketSnapshot; member?: boolean }) {
   const reduce = useReducedMotion();
   const fade = (delay: number) =>
     reduce
@@ -75,12 +75,25 @@ export function Hero({ snapshot }: { snapshot: MarketSnapshot }) {
           </motion.p>
 
           <motion.div {...fade(0.55)} className="mt-10 flex flex-col gap-3 sm:flex-row">
-            <ButtonLink href="/invest#apply" size="lg" icon>
-              Join the Syndicate
-            </ButtonLink>
-            <ButtonLink href="/trades" size="lg" variant="secondary">
-              Explore our trading
-            </ButtonLink>
+            {member ? (
+              <>
+                <ButtonLink href="/portal" size="lg" icon>
+                  Member portal
+                </ButtonLink>
+                <ButtonLink href="/trades" size="lg" variant="secondary">
+                  Explore our trading
+                </ButtonLink>
+              </>
+            ) : (
+              <>
+                <ButtonLink href="/signup" size="lg" icon>
+                  Request access
+                </ButtonLink>
+                <ButtonLink href="/login" size="lg" variant="secondary">
+                  Member sign in
+                </ButtonLink>
+              </>
+            )}
           </motion.div>
 
           <motion.dl

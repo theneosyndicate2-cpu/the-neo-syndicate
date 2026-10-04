@@ -39,8 +39,7 @@ export function Performance({ summary }: { summary: PerformanceSummary }) {
         {isDemo && (
           <p className="mt-6 text-xs leading-relaxed text-faint">
             All performance figures on this page are illustrative placeholders and do not represent actual or verified
-            results. Verified records will be published here once independently confirmed. Past performance is not
-            indicative of future results.
+            results. Verified records will be published here once independently confirmed.
           </p>
         )}
       </div>

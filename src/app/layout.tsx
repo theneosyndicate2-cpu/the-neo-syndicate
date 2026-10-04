@@ -48,7 +48,8 @@ export const metadata: Metadata = {
     title: `${siteConfig.name} — ${siteConfig.tagline}`,
     description: siteConfig.description,
   },
-  robots: { index: true, follow: true },
+  // Private members' site: keep every page out of search engines.
+  robots: { index: false, follow: false, nocache: true },
   formatDetection: { telephone: false },
 };
 

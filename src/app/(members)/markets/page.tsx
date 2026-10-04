@@ -3,7 +3,6 @@ import { pageMetadata } from "@/lib/seo";
 import { getMarketSnapshot } from "@/services/marketData";
 import { PageHero } from "@/components/sections/PageHero";
 import { CTASection } from "@/components/sections/CTASection";
-import { RiskDisclosure } from "@/components/sections/RiskDisclosure";
 import { MarketCard } from "@/components/cards/MarketCard";
 import { MarketsTable } from "@/components/markets/MarketsTable";
 import { DataSourceBadge } from "@/components/ui/Badge";
@@ -92,12 +91,10 @@ export default async function MarketsPage() {
               </Reveal>
             ))}
           </div>
-          <Reveal className="mt-12">
-            <RiskDisclosure
-              title="About this data"
-              text="Prices are sourced from public market feeds (Swissquote spot quotes, Coinbase, and ICE/COMEX session data) and the DXY value is calculated from live FX rates using the ICE formula. Feeds can be delayed, interrupted or differ from your broker's prices. Trend, bias, sentiment, pivot levels and notes are calculated automatically from price action — they are general information, not personal advice, and must not be relied on as the sole basis for trading decisions."
-            />
-          </Reveal>
+          <p className="mt-12 font-mono text-[0.6875rem] leading-relaxed tracking-[0.04em] text-faint">
+            Data: Swissquote spot quotes, Coinbase, ICE/COMEX session data. DXY calculated from live FX rates (ICE
+            formula). Trend, bias, sentiment and levels are calculated from price action.
+          </p>
         </div>
       </section>
 

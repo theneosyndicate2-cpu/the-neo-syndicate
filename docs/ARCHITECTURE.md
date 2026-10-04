@@ -64,6 +64,17 @@ Without a provider the flow runs in **test mode** (`EMAIL_DELIVERY=console`, or 
 is logged and shown on screen with a "Test mode" label — never enable that on the live site. Attempt/throttle
 counters are in-memory per instance; move them to Redis/the database when running multiple instances.
 
+### Private (members-only) site
+- **Public:** `/` (members-only landing for signed-out visitors), `/login`, `/signup`, `/forgot-password`,
+  `/contact`, `/terms`, `/privacy`, `/risk-disclosure`.
+- **Signed-in (any tier):** everything under `src/app/(members)/` — syndicate, markets, invest (to apply),
+  community — plus `/portal`. Elite trades (`/trades`, `/portal/trades`, home preview) require **Member** tier+.
+- Enforcement: `src/proxy.ts` redirects requests without a session cookie to `/login?next=…`; the `(members)` and
+  `portal` layouts validate the session server-side (forged cookies are rejected).
+- Search engines: `noindex` on every page, `robots.txt` disallows `/`, no sitemap.
+- Risk wording is intentionally minimal: a one-line footer link, the `/risk-disclosure` page and the
+  acknowledgement tickbox on the investment application.
+
 ### Member accounts & portal
 - **Database:** Drizzle ORM on PostgreSQL. No `DATABASE_URL` → embedded PGlite in `.data/pglite` (local only).
   Set `DATABASE_URL` in production. Schema: `src/db/schema.ts`; SQL migrations in `src/db/migrations.ts` run
